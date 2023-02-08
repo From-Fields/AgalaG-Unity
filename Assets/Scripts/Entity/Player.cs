@@ -15,6 +15,8 @@ public class Player : MonoBehaviour, Entity
     [SerializeField]
     private Weapon _defaultWeapon;
 
+    private Vector2 _currentVelocity = Vector2.zero;
+
     [HideInInspector]
     public float currentSpeed;
     [SerializeField] [Range(10, 100)]
@@ -43,9 +45,12 @@ public class Player : MonoBehaviour, Entity
 
     // Entity Implementation    
     public int health => this._currentHealth;
+    public Vector2 CurrentVelocity => this._currentVelocity;
+    public Vector2 Position => this._rigidbody.position;
 
     public void Move(Vector2 direction, float speed) {
         Vector2 nDirection = direction.normalized;
+        _currentVelocity = nDirection;
 
         Vector2 destination = transform.position + (Vector3) nDirection * speed;
 
