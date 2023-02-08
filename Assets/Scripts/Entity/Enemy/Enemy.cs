@@ -17,6 +17,8 @@ public abstract class Enemy: MonoBehaviour, Entity
     protected iEnemyAction _timeoutAction;
     protected iEnemyAction _currentAction;
 
+    
+    public float acceleration;
     public float DesiredSpeed => _currentSpeed;
     public abstract Rigidbody2D Rigidbody { get; }
 
@@ -87,7 +89,7 @@ public abstract class Enemy: MonoBehaviour, Entity
     public abstract int health { get; }
     public abstract Vector2 CurrentVelocity { get; }
     public abstract Vector2 Position { get; }
-    public abstract void Move(Vector2 direction, float speed);
+    public abstract void Move(Vector2 direction, float speed, float acceleration);
     public abstract void Shoot();
     public abstract void TakeDamage(int damage);
     public abstract void Die();

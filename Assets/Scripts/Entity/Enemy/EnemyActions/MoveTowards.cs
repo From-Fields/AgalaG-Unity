@@ -10,6 +10,8 @@ public class MoveTowards: iEnemyAction
     [SerializeField]
     private float _speedModifier;
     [SerializeField]
+    private float _accelerationModifier;
+    [SerializeField]
     private float _steeringSpeed;
     [SerializeField]
     private float _maximumAngle;
@@ -20,18 +22,20 @@ public class MoveTowards: iEnemyAction
     private Vector2 _desiredDirection = Vector2.zero;
 
     //Constructors
-    public MoveTowards(float speedModifier, float trackingSpeed, float maximumAngle, float minimumDistance, Vector2 targetPosition)
+    public MoveTowards(float speedModifier, float accelerationModifier, float trackingSpeed, float maximumAngle, float minimumDistance, Vector2 targetPosition)
     {
         _speedModifier = speedModifier;
+        _accelerationModifier = accelerationModifier;
         _steeringSpeed = trackingSpeed;
         _maximumAngle = maximumAngle;
         _minimumDistance = minimumDistance;
         _targetPosition = targetPosition;
         _targetObject = null;
     }
-    public MoveTowards(float speedModifier, float trackingSpeed, float maximumAngle, float minimumDistance, Entity targetObject)
+    public MoveTowards(float speedModifier, float accelerationModifier, float trackingSpeed, float maximumAngle, float minimumDistance, Entity targetObject)
     {
         _speedModifier = speedModifier;
+        _accelerationModifier = accelerationModifier;
         _steeringSpeed = trackingSpeed;
         _maximumAngle = maximumAngle;
         _minimumDistance = minimumDistance;
@@ -64,7 +68,7 @@ public class MoveTowards: iEnemyAction
     public bool CheckCondition(Enemy target) => Vector2.Distance(target.Position, _targetPosition) <= _minimumDistance; 
     public void FixedUpdate(Enemy target) 
     {
-        target.Move(_desiredDirection, target.DesiredSpeed * _speedModifier);
+        target.Move(_desiredDirection, target.DesiredSpeed * _speedModifier, target.acceleration * _accelerationModifier);
     }
     public void Update(Enemy target) 
     {
@@ -74,6 +78,6 @@ public class MoveTowards: iEnemyAction
         _desiredDirection = GetSteeringVector(target.DesiredSpeed, target.Position, target.CurrentVelocity);
     }
     public void OnStart(Enemy target) { return; }
-    public void OnFinish(Enemy target) { target.Move(Vector2.zero, target.DesiredSpeed); }
+    public void OnFinish(Enemy target) { target.Move(Vector2.zero, target.DesiredSpeed, target.acceleration * 1000); }
     #endregion
 }
