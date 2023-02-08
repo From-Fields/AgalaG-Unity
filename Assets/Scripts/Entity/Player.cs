@@ -96,7 +96,6 @@ public class Player : MonoBehaviour, Entity
     private void FixedUpdate()
     {
         if(!isDead) {
-            Debug.Log(_movement);
             Move(_movement, currentSpeed, currentAcceleration);
         }
     }
