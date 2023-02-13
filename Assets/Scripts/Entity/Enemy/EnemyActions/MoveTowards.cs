@@ -68,7 +68,7 @@ public class MoveTowards: iEnemyAction
     public bool CheckCondition(Enemy target) => Vector2.Distance(target.Position, _targetPosition) <= _minimumDistance; 
     public void FixedUpdate(Enemy target) 
     {
-        target.Move(_desiredDirection, target.DesiredSpeed * _speedModifier, target.acceleration * _accelerationModifier);
+        target.Move(_desiredDirection, target.DesiredSpeed * _speedModifier, target._currentAcceleration * _accelerationModifier);
     }
     public void Update(Enemy target) 
     {
@@ -78,6 +78,6 @@ public class MoveTowards: iEnemyAction
         _desiredDirection = GetSteeringVector(target.DesiredSpeed, target.Position, target.CurrentVelocity);
     }
     public void OnStart(Enemy target) { return; }
-    public void OnFinish(Enemy target) { target.Move(Vector2.zero, target.DesiredSpeed, target.acceleration * 1000); }
+    public void OnFinish(Enemy target) { target.Move(Vector2.zero, target.DesiredSpeed, target._currentAcceleration * 1000); }
     #endregion
 }

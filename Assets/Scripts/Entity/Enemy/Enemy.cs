@@ -7,9 +7,15 @@ public abstract class Enemy: MonoBehaviour, Entity
     //Attributes
     public int score;
 
-    protected float _currentSpeed;    
     [SerializeField]
-    protected float _defaultSpeed;
+    protected float _defaultSpeed = 100;
+    protected float _currentSpeed;    
+
+    [SerializeField]
+    public float _defaultAcceleration = 10;
+    public float _currentAcceleration;
+
+    protected bool _isDead;
 
     [SerializeField]
     protected Queue<iEnemyAction> _actionQueue;
@@ -17,8 +23,6 @@ public abstract class Enemy: MonoBehaviour, Entity
     protected iEnemyAction _timeoutAction;
     protected iEnemyAction _currentAction;
 
-    
-    public float acceleration;
     public float DesiredSpeed => _currentSpeed;
     public abstract Rigidbody2D Rigidbody { get; }
 
@@ -43,6 +47,8 @@ public abstract class Enemy: MonoBehaviour, Entity
         if(actionQueue == null || timeoutAction == null)
             throw new ArgumentNullException("Action queue and Timeout action may not be null");
 
+        this.SubInitialize();
+
         this._actionQueue = actionQueue;
         this._startingAction = startingAction;
         this._timeoutAction = timeoutAction;
@@ -57,6 +63,7 @@ public abstract class Enemy: MonoBehaviour, Entity
     }
     public void Reserve()
     {
+        this._isDead = true;
         this._actionQueue = null;
         this._startingAction = null;
         this._timeoutAction = null;
@@ -67,7 +74,7 @@ public abstract class Enemy: MonoBehaviour, Entity
     //Unity Hooks
     public void Update()
     {
-        if(_currentAction == null)
+        if(_isDead || _currentAction == null)
             return;
 
         if(_currentAction.CheckCondition(this))
@@ -78,12 +85,14 @@ public abstract class Enemy: MonoBehaviour, Entity
     }
     public void FixedUpdate()
     {
-        if(_currentAction == null)
+        if(_isDead || _currentAction == null)
             return;
         
         if(!_currentAction.CheckCondition(this))
             _currentAction.FixedUpdate(this);
     }
+
+    protected abstract void SubInitialize();
 
     #region Interface Implementation
     public abstract int health { get; }

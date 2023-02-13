@@ -67,6 +67,7 @@ public class Player : MonoBehaviour, Entity
 
     public void TakeDamage(int damage) {
         this._currentHealth -= damage;
+        // Debug.Log((_currentHealth + damage) + " - " + damage + " = " + _currentHealth);
 
         if(this._currentHealth <= 0)
             this.Die();

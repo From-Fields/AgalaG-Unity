@@ -156,8 +156,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 0
-  _defaultSpeed: 10
-  acceleration: 10
+  _defaultSpeed: 100
+  _defaultAcceleration: 10
+  _currentAcceleration: 0
+  _defaultKamikazeDamage: 1
+  _defaultHealth: 1
   target: {fileID: 759839577}
 --- !u!212 &177039574
 SpriteRenderer:
@@ -246,7 +249,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &177039577
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -429,7 +432,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &759839581
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -440,7 +443,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.075}

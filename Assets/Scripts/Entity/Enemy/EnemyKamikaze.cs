@@ -2,9 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestEnemy : Enemy
+public class EnemyKamikaze : Enemy
 {
     Rigidbody2D _rigidbody;
+
+    [SerializeField]
+    private int _defaultKamikazeDamage = 1;
+    [SerializeField]
+    private int _defaultHealth = 1;
+
+    private int _currentHealth;
+    private int _maxHealth;
+
+    private int _kamikazeDamage;
 
     [SerializeField]
     GameObject target;
@@ -16,9 +26,6 @@ public class TestEnemy : Enemy
 
     private void Start()
     {
-        this._defaultSpeed = 100;
-        this._currentSpeed = _defaultSpeed;
-
         Queue<iEnemyAction> queue = new Queue<iEnemyAction>();
         queue.Enqueue(new MoveTowards(1, 1, 0.05f, 20, 0.1f, new Vector2(-1, 3)));
         queue.Enqueue(new Shoot(2));
@@ -36,7 +43,7 @@ public class TestEnemy : Enemy
 
     public override void Die()
     {
-        Debug.Log("OMAEWA MOU SHINDEIRU");
+        Reserve();
     }
 
     public override void Move(Vector2 direction, float speed, float acceleration)
@@ -51,6 +58,35 @@ public class TestEnemy : Enemy
 
     public override void TakeDamage(int damage)
     {
-            Debug.Log("OWIE " + damage);
+        _currentHealth = Mathf.Clamp(_currentHealth - damage, 0, _maxHealth);
+
+        if(_currentHealth == 0)
+            Die();
+    }
+
+    protected override void SubInitialize() 
+    {
+        this._currentSpeed = _defaultSpeed;
+        this._currentAcceleration = _defaultAcceleration;
+
+        _isDead = false;
+        _kamikazeDamage = _defaultKamikazeDamage;
+        _maxHealth = _defaultHealth;
+        _currentHealth = _defaultHealth;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(_isDead)
+            return;
+
+        Entity entity = other.gameObject.GetComponentInChildren<Entity>();
+
+        // Debug.Log("collision");
+
+        if(entity != null)
+        {
+            entity.TakeDamage(this._kamikazeDamage);
+            this.Die();
+        }    
     }
 }
