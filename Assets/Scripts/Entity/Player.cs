@@ -37,14 +37,21 @@ public class Player : MonoBehaviour, Entity
     public void SwitchWeapon(Weapon newWeapon) {
         this.currentWeapon = newWeapon;
     }
+
+    public void SwitchToDefaultWeapon() {
+        SwitchWeapon(_defaultWeapon);
+    }
+
     public void AddPowerUp(PowerUp newPowerUp) {
         if(!this.powerUps.Contains(newPowerUp)) {
             this.powerUps.Add(newPowerUp);
         }
     }
+    
     public void RemovePowerUp(PowerUp powerUp) {
         this.powerUps.Remove(powerUp);
     }
+    
     public void Heal(int amount) {
         this._currentHealth = Mathf.Clamp(_currentHealth + amount, 0, _maxHealth);
     }
@@ -63,6 +70,7 @@ public class Player : MonoBehaviour, Entity
     }
     public void Shoot() {
         Debug.Log("Pew");
+        currentWeapon.Shoot();
     }
 
     public void TakeDamage(int damage) {
