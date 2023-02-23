@@ -70,6 +70,7 @@ public class Player : MonoBehaviour, Entity
     }
     public void Shoot() {
         Debug.Log("Pew");
+        currentWeapon.Shoot();
     }
 
     public void TakeDamage(int damage) {

@@ -7,13 +7,15 @@ public class Bullet : MonoBehaviour
 {
     private Sprite _sprite;
     private SpriteRenderer _spriteRenderer;
-    [SerializeField] private Vector2 _direction = Vector2.zero;
-    [SerializeField] private float _speed = 0;
-    [SerializeField] private string _shooter;
-    [SerializeField] private int _damage;
+    private Vector3 _direction = Vector3.zero;
+    private float _speed = 0;
+    private string _shooter;
+    [SerializeField][Min(1)] private int _damage = 1;
+    [SerializeField][Min(.01f)] private float _timeToDestroySelf = 1f;
+    private float _counter = 0f;
 
     void Awake() {
-        _sprite = (Sprite) Resources.Load("Default_Sprite.png");
+        _sprite = Resources.Load<Sprite>("Sprites/Bullet_Player");
         _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
@@ -23,6 +25,16 @@ public class Bullet : MonoBehaviour
         {
             Entity entity = collision?.gameObject.GetComponent<Entity>();
             entity?.TakeDamage(_damage);
+            DestroySelf();
+        }
+    }
+
+    void Update() {
+        transform.position += _speed * Time.deltaTime * _direction;
+
+        _counter += Time.deltaTime;
+        if (_counter >= _timeToDestroySelf)
+        {
             DestroySelf();
         }
     }
@@ -39,6 +51,7 @@ public class Bullet : MonoBehaviour
         _speed = speed;
         _shooter = shooter;
         _sprite = sprite ?? _sprite;
+        _spriteRenderer.sprite = _sprite;
 
         gameObject.SetActive(true);
     }
