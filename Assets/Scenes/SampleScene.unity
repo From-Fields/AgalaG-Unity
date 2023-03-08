@@ -532,20 +532,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e8e6898e65e7154babd649d163d33b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spawnInterval: 1
+  _spawnInterval: 0.25
   positions:
-  - {x: -2, y: 4.55}
-  - {x: 0, y: 4.55}
-  - {x: 2, y: 4.55}
-  - {x: 2, y: 2}
-  - {x: 2, y: 0}
-  - {x: 2, y: -2}
-  - {x: 2, y: -4.55}
-  - {x: 0, y: -4.55}
-  - {x: -2, y: -4.55}
-  - {x: -2, y: -2}
-  - {x: -2, y: 0}
-  - {x: -2, y: 2}
+  - {x: 0, y: 4.75}
+  - {x: 2.5, y: 4}
+  - {x: 4, y: 2.25}
+  - {x: 4.75, y: 0}
+  - {x: 4, y: -2.25}
+  - {x: 2.5, y: -4}
+  - {x: 0, y: -4.75}
+  - {x: -2.5, y: -4}
+  - {x: -4, y: -2.25}
+  - {x: -4.75, y: 0}
+  - {x: -4, y: 2.25}
+  - {x: -2.5, y: 4}
 --- !u!1001 &7898619899396778343
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -559,11 +559,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7898619899506655664, guid: c0fe752241468b042a3c0e1ffc83ae97, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7898619899506655664, guid: c0fe752241468b042a3c0e1ffc83ae97, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.55
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7898619899506655664, guid: c0fe752241468b042a3c0e1ffc83ae97, type: 3}
       propertyPath: m_LocalPosition.z

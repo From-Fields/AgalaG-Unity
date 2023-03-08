@@ -9,7 +9,7 @@ public class PoolTest : MonoBehaviour
     private Queue<Vector2> _positions;
 
     [SerializeField]
-    private int _spawnInterval;
+    private float _spawnInterval;
     [SerializeField]
     private List<Vector2> positions;
 
@@ -20,7 +20,7 @@ public class PoolTest : MonoBehaviour
         StartCoroutine(WaitAndPull(_spawnInterval));
     }
 
-    private IEnumerator WaitAndPull(int interval)
+    private IEnumerator WaitAndPull(float interval)
     {
         yield return new WaitForSeconds(interval);
 
@@ -32,7 +32,7 @@ public class PoolTest : MonoBehaviour
         Vector2 position = _positions.Dequeue();
         iEnemyAction action = new WaitSeconds(1);
         Queue<iEnemyAction> actions = new Queue<iEnemyAction>(new[] {action});
-        WaveUnit<EnemyKamikaze> unit = new WaveUnit<EnemyKamikaze>(position, action, action, actions, Score);
+        iWaveUnit unit = new WaveUnit<EnemyKamikaze>(position, action, action, actions, Score);
         unit.Initialize();
 
         _positions.Enqueue(position);

@@ -4,21 +4,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class WaveUnit<T> where T: Enemy<T> 
+public class WaveUnit<T>: iWaveUnit where T: Enemy<T> 
 {
     private T _enemy;
     private Vector2 _startingPoint;
     private iEnemyAction _startingAction;
     private iEnemyAction _timeoutAction;
     private Queue<iEnemyAction> _actions;
-    private float _timeout;
 
-    public Action<WaveUnit<T>> onUnitReleased;
+    private float _timeout;
+    private bool _hasTimedOut;
+
+    public Action<iWaveUnit> onUnitReleased { get; set; }
 
     public WaveUnit(
         Vector2 startingPoint, iEnemyAction startingAction, iEnemyAction timeoutAction, Queue<iEnemyAction> actions, 
-        Action<int> onDeath = null, Action onRelease = null, float timeout = -1)
-    {
+        Action<int> onDeath = null, Action onRelease = null, float timeout = -1
+    ) {
         _enemy = EntityPool<T>.Instance.Pool.Get();
         _startingPoint = startingPoint;
         
@@ -31,18 +33,22 @@ public class WaveUnit<T> where T: Enemy<T>
         _enemy.onRelease += () => onUnitReleased?.Invoke(this);
 
         _timeout = timeout;
+        _hasTimedOut = false;
     }
 
-    public void Initialize() 
+    public void Initialize()
     {
         _enemy.Initialize(_actions, _startingAction, _timeoutAction, _startingPoint);
 
         if(_timeout > 0)
-            _enemy.StartCoroutine(SetTimeOut());
+            CoroutineRunner.Instance.CallbackTimer(_timeout, ExecuteTimeoutAction);
     }
-    private IEnumerator SetTimeOut()
+    public void ExecuteTimeoutAction()
     {
-        yield return new WaitForSeconds(_timeout);
+        if(_hasTimedOut)
+            return;
+
+        _hasTimedOut = true;
 
         _enemy.ExecuteTimeoutAction();
     }

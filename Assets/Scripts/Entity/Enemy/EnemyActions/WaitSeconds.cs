@@ -18,14 +18,6 @@ public class WaitSeconds: iEnemyAction
         this._isDone = false;
     }
 
-    //Methods
-    private IEnumerator WaitForTimeout()
-    {
-        yield return new WaitForSeconds(_timeout);
-        this._isDone = true;
-        yield return null;
-    }
-
     #region Interface Implementation
     public bool CheckCondition(iEnemy target) => _isDone;
     public void FixedUpdate(iEnemy target) { return; }
@@ -33,7 +25,7 @@ public class WaitSeconds: iEnemyAction
     public void OnStart(iEnemy target)
     {
         this._isDone = false;
-        target.StartCoroutine(WaitForTimeout());
+        CoroutineRunner.Instance.CallbackTimer(_timeout, () => _isDone = true);
     }
     public void OnFinish(iEnemy target) { return; }
     #endregion
