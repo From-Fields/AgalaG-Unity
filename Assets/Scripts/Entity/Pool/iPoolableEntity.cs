@@ -7,6 +7,6 @@ public interface iPoolableEntity<T> where T: MonoBehaviour, iPoolableEntity<T>, 
 {
 	public T OnCreate();
 	public Action<T> onGetFromPool { get; }
-	public Action<T> onReserve { get; }
+	public Action<T> onReleaseToPool { get; }
     public IObjectPool<T> Pool { get; }
 }

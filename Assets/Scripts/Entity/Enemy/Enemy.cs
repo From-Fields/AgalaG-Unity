@@ -36,6 +36,7 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
 
     //Events
     public Action<int> onDeath;
+    public Action onRelease;
 
     //Methods
     public void ExecuteNextAction()
@@ -80,11 +81,16 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
     }
     protected void OnReserve()
     {
-        this._isDead = true;
+        this.onRelease?.Invoke();
+        
         this._actionQueue = null;
         this._startingAction = null;
         this._timeoutAction = null;
+
         this.onDeath = null;
+        this.onRelease = null;
+        
+        this._isDead = true;
         this.transform.position = Vector3.zero;
         this.gameObject.SetActive(false);
     }
@@ -136,7 +142,7 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
     //iPoolableEntity
 	public abstract T OnCreate();
 	public abstract Action<T> onGetFromPool { get; }
-	public virtual Action<T> onReserve => (obj) => obj.OnReserve();
+	public virtual Action<T> onReleaseToPool => (obj) => obj.OnReserve();
     public abstract IObjectPool<T> Pool { get; }
     #endregion
 }

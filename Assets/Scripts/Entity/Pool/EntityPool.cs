@@ -12,13 +12,13 @@ public class EntityPool<T> : Singleton<EntityPool<T>> where T: MonoBehaviour, iP
     public IObjectPool<T> Pool {
         get {
             if(_pool == null)
-                _pool = new ObjectPool<T>(ObjReference.OnCreate, ObjReference.onGetFromPool, ObjReference.onReserve);
+                _pool = new ObjectPool<T>(ObjReference.OnCreate, ObjReference.onGetFromPool, ObjReference.onReleaseToPool);
 
             return _pool;
         }
     }
 
-    public GameObject Prefab {
+    private GameObject Prefab {
         get {
             if(_prefab == null)
                 _prefab = PrefabRepository.Instance.GetPrefabOfType(typeof(T));

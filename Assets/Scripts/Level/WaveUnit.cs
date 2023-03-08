@@ -13,16 +13,23 @@ public class WaveUnit<T> where T: Enemy<T>
     private Queue<iEnemyAction> _actions;
     private float _timeout;
 
-    public bool IsDone => _enemy.IsDead;
+    public Action<WaveUnit<T>> onUnitReleased;
 
-    public WaveUnit(Vector2 startingPoint, iEnemyAction startingAction, iEnemyAction timeoutAction, Queue<iEnemyAction> actions, Action<int> onDeath = null, float timeout = -1)
+    public WaveUnit(
+        Vector2 startingPoint, iEnemyAction startingAction, iEnemyAction timeoutAction, Queue<iEnemyAction> actions, 
+        Action<int> onDeath = null, Action onRelease = null, float timeout = -1)
     {
         _enemy = EntityPool<T>.Instance.Pool.Get();
         _startingPoint = startingPoint;
+        
         _startingAction = startingAction;
         _timeoutAction = timeoutAction;
         _actions = actions;
+
         _enemy.onDeath += onDeath;
+        _enemy.onRelease += onRelease;
+        _enemy.onRelease += () => onUnitReleased?.Invoke(this);
+
         _timeout = timeout;
     }
 
