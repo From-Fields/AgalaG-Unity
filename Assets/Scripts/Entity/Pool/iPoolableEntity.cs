@@ -6,7 +6,7 @@ using UnityEngine.Pool;
 public interface iPoolableEntity<T> where T: MonoBehaviour, iPoolableEntity<T>, Entity
 {
 	public T OnCreate();
-	public Action<T> OnGetFromPool { get; }
-	public Action<T> OnReserve { get; }
+	public Action<T> onGetFromPool { get; }
+	public Action<T> onReserve { get; }
     public IObjectPool<T> Pool { get; }
 }

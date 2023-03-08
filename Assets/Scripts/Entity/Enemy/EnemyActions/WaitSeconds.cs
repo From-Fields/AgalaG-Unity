@@ -32,7 +32,6 @@ public class WaitSeconds: iEnemyAction
     public void Update(iEnemy target) { return; }
     public void OnStart(iEnemy target)
     {
-        Debug.Log("Waiting");
         this._isDone = false;
         target.StartCoroutine(WaitForTimeout());
     }

@@ -32,15 +32,7 @@ public class EnemyKamikaze: Enemy<EnemyKamikaze>
     {
         _rigidbody = GetComponent<Rigidbody2D>();
     }
-    private void Start()
-    {
-        // Queue<iEnemyAction> queue = new Queue<iEnemyAction>();
-        // queue.Enqueue(new MoveTowards(1, 1, 0.05f, 20, 0.1f, new Vector2(-1, 3)));
-        // queue.Enqueue(new Shoot(2));
-        // queue.Enqueue(new MoveTowards(5, 100, 0.05f, 40, 1f, target.GetComponentInChildren<Entity>()));
-
-        // Initialize(queue, new WaitSeconds(1), new WaitSeconds(1), this.Position);
-    }
+    private void Start() { }
     private void OnCollisionEnter2D(Collision2D other) 
     {
         if(_isDead)
@@ -73,11 +65,10 @@ public class EnemyKamikaze: Enemy<EnemyKamikaze>
         if(_currentHealth == 0)
             Die();
     }
-    public override void Die() => Pool.Release(this);
 
     //iPoolableEntity
     public override EnemyKamikaze OnCreate() => Instantiate<EnemyKamikaze>(EntityPool<EnemyKamikaze>.Instance.ObjReference);
-    public override Action<EnemyKamikaze> OnGetFromPool => null;
+    public override Action<EnemyKamikaze> onGetFromPool => null;
     public override IObjectPool<EnemyKamikaze> Pool => EntityPool<EnemyKamikaze>.Instance.Pool;
 
     //Enemy
@@ -91,5 +82,6 @@ public class EnemyKamikaze: Enemy<EnemyKamikaze>
         _maxHealth = _defaultHealth;
         _currentHealth = _defaultHealth;
     }
+    protected override void Reserve() => Pool.Release(this);
     #endregion    
 }

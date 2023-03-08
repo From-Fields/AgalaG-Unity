@@ -34,27 +34,18 @@ public class Player : MonoBehaviour, Entity
     private Vector2 _movement = Vector2.zero; 
 
     // Methods
-    public void SwitchWeapon(Weapon newWeapon) {
-        this.currentWeapon = newWeapon;
-    }
-
-    public void SwitchToDefaultWeapon() {
-        SwitchWeapon(_defaultWeapon);
-    }
+    public void SwitchWeapon(Weapon newWeapon) => this.currentWeapon = newWeapon;
+    public void SwitchToDefaultWeapon() => SwitchWeapon(_defaultWeapon);
 
     public void AddPowerUp(PowerUp newPowerUp) {
         if(!this.powerUps.Contains(newPowerUp)) {
             this.powerUps.Add(newPowerUp);
         }
     }
-    
     public void RemovePowerUp(PowerUp powerUp) {
         this.powerUps.Remove(powerUp);
     }
-    
-    public void Heal(int amount) {
-        this._currentHealth = Mathf.Clamp(_currentHealth + amount, 0, _maxHealth);
-    }
+    public void Heal(int amount) => this._currentHealth = Mathf.Clamp(_currentHealth + amount, 0, _maxHealth);
 
     // Entity Implementation    
     public int health => this._currentHealth;
@@ -68,20 +59,15 @@ public class Player : MonoBehaviour, Entity
 
         _rigidbody.velocity = Vector2.Lerp(_rigidbody.velocity, destination, Time.fixedDeltaTime * acceleration);
     }
-    public void Shoot() {
-        Debug.Log("Pew");
-        currentWeapon.Shoot();
-    }
-
+    public void Shoot() => currentWeapon.Shoot();
     public void TakeDamage(int damage) {
         this._currentHealth -= damage;
-        // Debug.Log((_currentHealth + damage) + " - " + damage + " = " + _currentHealth);
 
         if(this._currentHealth <= 0)
             this.Die();
     }
     public void Die() {
-        Debug.Log("NANI");
+        gameObject.SetActive(false);
         this.isDead = true;
     }
 
@@ -95,17 +81,18 @@ public class Player : MonoBehaviour, Entity
         _currentHealth = _maxHealth;
     }
     private void Update() {
-        if(!isDead) {
-            _movement = (_inputHandler.HasMovement) ? _inputHandler.Movement : Vector2.zero;
-            if(_inputHandler.Shoot) {
-                Shoot();
-            }
-        }
+        if(isDead) 
+            return;
+
+        _movement = (_inputHandler.HasMovement) ? _inputHandler.Movement : Vector2.zero;
+        if(_inputHandler.Shoot)
+            Shoot();
     }
     private void FixedUpdate()
     {
-        if(!isDead) {
-            Move(_movement, currentSpeed, currentAcceleration);
-        }
+        if(isDead)
+            return;
+
+        Move(_movement, currentSpeed, currentAcceleration);
     }
 }

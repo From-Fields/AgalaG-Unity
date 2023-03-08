@@ -31,6 +31,12 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
     //References
     public abstract Rigidbody2D Rigidbody { get; }
 
+    //Properties
+    public bool IsDead => this._isDead;
+
+    //Events
+    public Action<int> onDeath;
+
     //Methods
     public void ExecuteNextAction()
     {
@@ -43,12 +49,15 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
     public void ExecuteTimeoutAction() => this.SwitchAction(this._timeoutAction);
     protected void SwitchAction(iEnemyAction action)
     {
+        if(_isDead)
+            return;
+
         this._currentAction?.OnFinish(this);
         this._currentAction = action;
         this._currentAction?.OnStart(this);
 
         if(_currentAction == null)
-            Die();
+            Reserve();
     }
     public void Initialize(Queue<iEnemyAction> actionQueue, iEnemyAction startingAction, iEnemyAction timeoutAction, Vector2 startingPoint)
     {
@@ -69,18 +78,20 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
         else
             this.ExecuteNextAction();
     }
-    public void Reserve()
+    protected void OnReserve()
     {
         this._isDead = true;
         this._actionQueue = null;
         this._startingAction = null;
         this._timeoutAction = null;
+        this.onDeath = null;
         this.transform.position = Vector3.zero;
         this.gameObject.SetActive(false);
     }
 
     //Abstract Methods
     protected abstract void SubInitialize();
+    protected abstract void Reserve();
 
     //Unity Hooks
     public void Update()
@@ -112,7 +123,11 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
     public abstract void Move(Vector2 direction, float speed, float acceleration);
     public abstract void Shoot();
     public abstract void TakeDamage(int damage);
-    public abstract void Die();
+    public void Die()
+    {
+        onDeath?.Invoke(this.score);
+        Reserve();
+    }
 
     //iEnemy
     public float DesiredSpeed => _currentSpeed;
@@ -120,8 +135,8 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
 
     //iPoolableEntity
 	public abstract T OnCreate();
-	public abstract Action<T> OnGetFromPool { get; }
-	public virtual Action<T> OnReserve => (obj) => obj.Reserve();
+	public abstract Action<T> onGetFromPool { get; }
+	public virtual Action<T> onReserve => (obj) => obj.OnReserve();
     public abstract IObjectPool<T> Pool { get; }
     #endregion
 }

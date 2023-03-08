@@ -12,7 +12,7 @@ public class EntityPool<T> : Singleton<EntityPool<T>> where T: MonoBehaviour, iP
     public IObjectPool<T> Pool {
         get {
             if(_pool == null)
-                _pool = new ObjectPool<T>(ObjReference.OnCreate, ObjReference.OnGetFromPool, ObjReference.OnReserve);
+                _pool = new ObjectPool<T>(ObjReference.OnCreate, ObjReference.onGetFromPool, ObjReference.onReserve);
 
             return _pool;
         }
