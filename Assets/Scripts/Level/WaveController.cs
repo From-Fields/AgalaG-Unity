@@ -21,6 +21,8 @@ public class WaveController
             unit.onUnitReleased += RemoveUnitFromWave;
             unit.Initialize();
         }
+
+        CoroutineRunner.Instance.CallbackTimer(_timeout, TimeOutAllUnits);
     }
     private void RemoveUnitFromWave(iWaveUnit unit)
     {
@@ -28,12 +30,6 @@ public class WaveController
 
         if(unitList.Count == 0)
             onWaveDone?.Invoke();
-    }
-    private IEnumerator SetTimeOut(float timeout)
-    {
-        yield return new WaitForSeconds(timeout);
-
-        TimeOutAllUnits();
     }
     private void TimeOutAllUnits()
     {
