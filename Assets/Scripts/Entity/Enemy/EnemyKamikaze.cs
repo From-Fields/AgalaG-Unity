@@ -2,81 +2,47 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
-public class EnemyKamikaze: Enemy<EnemyKamikaze>, iPoolableEntity<EnemyKamikaze>
+[RequireComponent(typeof(Rigidbody2D))]
+public class EnemyKamikaze: Enemy<EnemyKamikaze>
 {
-    Rigidbody2D _rigidbody;
-
+    //Attributes
+    //Damage
     [SerializeField]
     private int _defaultKamikazeDamage = 1;
+    private int _kamikazeDamage;
+
+    //Health
     [SerializeField]
     private int _defaultHealth = 1;
-
     private int _currentHealth;
     private int _maxHealth;
 
-    private int _kamikazeDamage;
-
+    //References
     [SerializeField]
-    GameObject target;
+    private GameObject target;
+    private Rigidbody2D _rigidbody;
 
+    //Properties
+    public override Rigidbody2D Rigidbody => _rigidbody;
+
+    // Unity Hooks
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
     }
-
     private void Start()
     {
-        Queue<iEnemyAction> queue = new Queue<iEnemyAction>();
-        queue.Enqueue(new MoveTowards(1, 1, 0.05f, 20, 0.1f, new Vector2(-1, 3)));
-        queue.Enqueue(new Shoot(2));
-        queue.Enqueue(new MoveTowards(5, 100, 0.05f, 40, 1f, target.GetComponentInChildren<Entity>()));
+        // Queue<iEnemyAction> queue = new Queue<iEnemyAction>();
+        // queue.Enqueue(new MoveTowards(1, 1, 0.05f, 20, 0.1f, new Vector2(-1, 3)));
+        // queue.Enqueue(new Shoot(2));
+        // queue.Enqueue(new MoveTowards(5, 100, 0.05f, 40, 1f, target.GetComponentInChildren<Entity>()));
 
-        Initialize(queue, new WaitSeconds(1), new WaitSeconds(1), this.Position);
+        // Initialize(queue, new WaitSeconds(1), new WaitSeconds(1), this.Position);
     }
-
-    public override Rigidbody2D Rigidbody => _rigidbody;
-    public override int health => 0;
-
-    public override Vector2 CurrentVelocity => _rigidbody.velocity;
-
-    public override Vector2 Position => _rigidbody.position;
-
-    public override void Die()
+    private void OnCollisionEnter2D(Collision2D other) 
     {
-        Reserve();
-    }
-
-    public override void Move(Vector2 direction, float speed, float acceleration)
-    {
-        _rigidbody.velocity = Vector2.Lerp(_rigidbody.velocity, direction * speed * Time.fixedDeltaTime, Time.fixedDeltaTime * acceleration);
-    }
-
-    public override void Shoot()
-    {
-        Debug.Log("FIRING MAH LAZOR");
-    }
-
-    public override void TakeDamage(int damage)
-    {
-        _currentHealth = Mathf.Clamp(_currentHealth - damage, 0, _maxHealth);
-
-        if(_currentHealth == 0)
-            Die();
-    }
-
-    protected override void SubInitialize() 
-    {
-        this._currentSpeed = _defaultSpeed;
-        this._currentAcceleration = _defaultAcceleration;
-
-        _isDead = false;
-        _kamikazeDamage = _defaultKamikazeDamage;
-        _maxHealth = _defaultHealth;
-        _currentHealth = _defaultHealth;
-    }
-
-    private void OnCollisionEnter2D(Collision2D other) {
         if(_isDead)
             return;
 
@@ -91,6 +57,39 @@ public class EnemyKamikaze: Enemy<EnemyKamikaze>, iPoolableEntity<EnemyKamikaze>
         }    
     }
 
-    public override Action<EnemyKamikaze> OnReserve { get; set; }
-    public override EntityPool<EnemyKamikaze> Pool => EntityPool<EnemyKamikaze>.Instance;
+    #region InterfaceImplementation
+    //iEntity
+    public override int health => 0;
+    public override Vector2 CurrentVelocity => _rigidbody.velocity;
+    public override Vector2 Position => _rigidbody.position;
+
+    public override void Move(Vector2 direction, float speed, float acceleration) =>
+        _rigidbody.velocity = Vector2.Lerp(_rigidbody.velocity, direction * speed * Time.fixedDeltaTime, Time.fixedDeltaTime * acceleration);
+    public override void Shoot() { }
+    public override void TakeDamage(int damage)
+    {
+        _currentHealth = Mathf.Clamp(_currentHealth - damage, 0, _maxHealth);
+
+        if(_currentHealth == 0)
+            Die();
+    }
+    public override void Die() => Pool.Release(this);
+
+    //iPoolableEntity
+    public override EnemyKamikaze OnCreate() => Instantiate<EnemyKamikaze>(EntityPool<EnemyKamikaze>.Instance.ObjReference);
+    public override Action<EnemyKamikaze> OnGetFromPool => null;
+    public override IObjectPool<EnemyKamikaze> Pool => EntityPool<EnemyKamikaze>.Instance.Pool;
+
+    //Enemy
+    protected override void SubInitialize() 
+    {
+        this._currentSpeed = _defaultSpeed;
+        this._currentAcceleration = _defaultAcceleration;
+
+        _isDead = false;
+        _kamikazeDamage = _defaultKamikazeDamage;
+        _maxHealth = _defaultHealth;
+        _currentHealth = _defaultHealth;
+    }
+    #endregion    
 }

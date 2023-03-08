@@ -2,28 +2,33 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where T: Enemy<T>
 {
     //Attributes
     public int score;
 
+    //Speed
     [SerializeField]
     protected float _defaultSpeed = 100;
     protected float _currentSpeed;    
 
+    //Acceleration
     [SerializeField]
     public float _defaultAcceleration = 10;
     public float _currentAcceleration;
 
     protected bool _isDead;
 
+    //Actions
     [SerializeField]
     protected Queue<iEnemyAction> _actionQueue;
     protected iEnemyAction _startingAction;
     protected iEnemyAction _timeoutAction;
     protected iEnemyAction _currentAction;
 
+    //References
     public abstract Rigidbody2D Rigidbody { get; }
 
     //Methods
@@ -41,6 +46,9 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
         this._currentAction?.OnFinish(this);
         this._currentAction = action;
         this._currentAction?.OnStart(this);
+
+        if(_currentAction == null)
+            Die();
     }
     public void Initialize(Queue<iEnemyAction> actionQueue, iEnemyAction startingAction, iEnemyAction timeoutAction, Vector2 startingPoint)
     {
@@ -71,6 +79,9 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
         this.gameObject.SetActive(false);
     }
 
+    //Abstract Methods
+    protected abstract void SubInitialize();
+
     //Unity Hooks
     public void Update()
     {
@@ -92,8 +103,6 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
             _currentAction.FixedUpdate(this);
     }
 
-    protected abstract void SubInitialize();
-
     #region Interface Implementation
     //iEntity
     public abstract int health { get; }
@@ -110,7 +119,9 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
     public float CurrentAcceleration => _currentAcceleration;
 
     //iPoolableEntity
-    public abstract Action<T> OnReserve { get; set; }
-    public abstract EntityPool<T> Pool { get; }
+	public abstract T OnCreate();
+	public abstract Action<T> OnGetFromPool { get; }
+	public virtual Action<T> OnReserve => (obj) => obj.Reserve();
+    public abstract IObjectPool<T> Pool { get; }
     #endregion
 }
