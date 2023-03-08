@@ -17,7 +17,7 @@ public class Player : MonoBehaviour, Entity
 
     [HideInInspector]
     public float currentSpeed;
-    [SerializeField] [Range(10, 100)]
+    [SerializeField] [Range(1, 100)]
     private float _defaultSpeed;
 
     [HideInInspector]

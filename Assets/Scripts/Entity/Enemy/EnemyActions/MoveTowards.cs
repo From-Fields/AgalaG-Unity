@@ -65,19 +65,19 @@ public class MoveTowards: iEnemyAction
     #region Interface Implementation
     //Behaviour ends if distance is less than the desired distance.
     //Desired direction is calculated on Update, applied on FixedUpdate.
-    public bool CheckCondition(Enemy target) => Vector2.Distance(target.Position, _targetPosition) <= _minimumDistance; 
-    public void FixedUpdate(Enemy target) 
+    public bool CheckCondition(iEnemy target) => Vector2.Distance(target.Position, _targetPosition) <= _minimumDistance; 
+    public void FixedUpdate(iEnemy target) 
     {
-        target.Move(_desiredDirection, target.DesiredSpeed * _speedModifier, target._currentAcceleration * _accelerationModifier);
+        target.Move(_desiredDirection, target.DesiredSpeed * _speedModifier, target.CurrentAcceleration * _accelerationModifier);
     }
-    public void Update(Enemy target) 
+    public void Update(iEnemy target) 
     {
         if(_targetObject != null)
             this._targetPosition = _targetObject.Position;
 
         _desiredDirection = GetSteeringVector(target.DesiredSpeed, target.Position, target.CurrentVelocity);
     }
-    public void OnStart(Enemy target) { return; }
-    public void OnFinish(Enemy target) { target.Move(Vector2.zero, target.DesiredSpeed, target._currentAcceleration * 1000); }
+    public void OnStart(iEnemy target) { return; }
+    public void OnFinish(iEnemy target) { target.Move(Vector2.zero, target.DesiredSpeed, target.CurrentAcceleration * 1000); }
     #endregion
 }

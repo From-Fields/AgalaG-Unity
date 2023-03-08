@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine;
 
 [Serializable]
-public class Shoot: iEnemyAction
+public class WaitSeconds: iEnemyAction
 {
     //Attributes
     [SerializeField]
@@ -12,7 +12,7 @@ public class Shoot: iEnemyAction
     private bool _isDone;
 
     //Constructors
-    public Shoot(float timeout)
+    public WaitSeconds(float timeout)
     {
         this._timeout = timeout;
         this._isDone = false;
@@ -27,14 +27,15 @@ public class Shoot: iEnemyAction
     }
 
     #region Interface Implementation
-    public bool CheckCondition(Enemy target) => _isDone;
-    public void FixedUpdate(Enemy target) { return; }
-    public void Update(Enemy target) => target.Shoot();
-    public void OnStart(Enemy target)
+    public bool CheckCondition(iEnemy target) => _isDone;
+    public void FixedUpdate(iEnemy target) { return; }
+    public void Update(iEnemy target) { return; }
+    public void OnStart(iEnemy target)
     {
+        Debug.Log("Waiting");
         this._isDone = false;
         target.StartCoroutine(WaitForTimeout());
     }
-    public void OnFinish(Enemy target) { return; }
+    public void OnFinish(iEnemy target) { return; }
     #endregion
 }

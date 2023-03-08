@@ -1,8 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Enemy: MonoBehaviour, Entity
+public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where T: Enemy<T>
 {
     //Attributes
     public int score;
@@ -23,7 +24,6 @@ public abstract class Enemy: MonoBehaviour, Entity
     protected iEnemyAction _timeoutAction;
     protected iEnemyAction _currentAction;
 
-    public float DesiredSpeed => _currentSpeed;
     public abstract Rigidbody2D Rigidbody { get; }
 
     //Methods
@@ -95,12 +95,22 @@ public abstract class Enemy: MonoBehaviour, Entity
     protected abstract void SubInitialize();
 
     #region Interface Implementation
+    //iEntity
     public abstract int health { get; }
     public abstract Vector2 CurrentVelocity { get; }
     public abstract Vector2 Position { get; }
+
     public abstract void Move(Vector2 direction, float speed, float acceleration);
     public abstract void Shoot();
     public abstract void TakeDamage(int damage);
     public abstract void Die();
+
+    //iEnemy
+    public float DesiredSpeed => _currentSpeed;
+    public float CurrentAcceleration => _currentAcceleration;
+
+    //iPoolableEntity
+    public abstract Action<T> OnReserve { get; set; }
+    public abstract EntityPool<T> Pool { get; }
     #endregion
 }

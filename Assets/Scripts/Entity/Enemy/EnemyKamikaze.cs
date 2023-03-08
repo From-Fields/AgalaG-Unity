@@ -1,8 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyKamikaze : Enemy
+public class EnemyKamikaze: Enemy<EnemyKamikaze>, iPoolableEntity<EnemyKamikaze>
 {
     Rigidbody2D _rigidbody;
 
@@ -75,7 +76,7 @@ public class EnemyKamikaze : Enemy
         _currentHealth = _defaultHealth;
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
+    private void OnCollisionEnter2D(Collision2D other) {
         if(_isDead)
             return;
 
@@ -89,4 +90,7 @@ public class EnemyKamikaze : Enemy
             this.Die();
         }    
     }
+
+    public override Action<EnemyKamikaze> OnReserve { get; set; }
+    public override EntityPool<EnemyKamikaze> Pool => EntityPool<EnemyKamikaze>.Instance;
 }
