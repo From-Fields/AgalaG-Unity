@@ -43,6 +43,8 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
     {
         if(this._actionQueue.Count > 0)
             this.SwitchAction(this._actionQueue.Dequeue());
+        else if(_currentAction != _timeoutAction)
+            this.SwitchAction(_timeoutAction);
         else
             this.SwitchAction(null);
     }
