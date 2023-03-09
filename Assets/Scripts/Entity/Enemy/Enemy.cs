@@ -94,12 +94,13 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
         
         this._isDead = true;
         this.transform.position = Vector3.zero;
+        this.Rigidbody.velocity = Vector3.zero;
         this.gameObject.SetActive(false);
     }
 
     //Abstract Methods
     protected abstract void SubInitialize();
-    protected abstract void Reserve();
+    public abstract void Reserve();
 
     //Unity Hooks
     public void Update()

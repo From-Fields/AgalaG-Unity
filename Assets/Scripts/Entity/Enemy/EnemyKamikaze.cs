@@ -82,6 +82,6 @@ public class EnemyKamikaze: Enemy<EnemyKamikaze>
         _maxHealth = _defaultHealth;
         _currentHealth = _defaultHealth;
     }
-    protected override void Reserve() => Pool.Release(this);
+    public override void Reserve() => Pool.Release(this);
     #endregion    
 }

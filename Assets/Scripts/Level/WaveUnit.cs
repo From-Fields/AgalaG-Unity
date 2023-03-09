@@ -52,4 +52,6 @@ public class WaveUnit<T>: iWaveUnit where T: Enemy<T>
 
         _enemy.ExecuteTimeoutAction();
     }
+
+    public void Reserve() => _enemy.Reserve();
 }

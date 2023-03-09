@@ -22,25 +22,33 @@ public class MoveTowards: iEnemyAction
     private Vector2 _desiredDirection = Vector2.zero;
 
     //Constructors
-    public MoveTowards(float speedModifier, float accelerationModifier, float trackingSpeed, float maximumAngle, float minimumDistance, Vector2 targetPosition)
+    public MoveTowards(Vector2 targetPosition): this(targetPosition, 1, 1, 1f, 360, 0.5f) { }
+    public MoveTowards(Entity target): this(target, 1, 1, 1f, 360, 0.5f) { }
+    public MoveTowards(Vector2 targetPosition,
+        float speedModifier, float accelerationModifier = 1, float trackingSpeed = 1f, 
+        float maximumAngle = 360, float minimumDistance = 0.5f
+    ) : this(speedModifier, accelerationModifier, trackingSpeed, maximumAngle, minimumDistance)
     {
-        _speedModifier = speedModifier;
-        _accelerationModifier = accelerationModifier;
-        _steeringSpeed = trackingSpeed;
-        _maximumAngle = maximumAngle;
-        _minimumDistance = minimumDistance;
         _targetPosition = targetPosition;
         _targetObject = null;
     }
-    public MoveTowards(float speedModifier, float accelerationModifier, float trackingSpeed, float maximumAngle, float minimumDistance, Entity targetObject)
+    public MoveTowards(Entity targetObject,
+        float speedModifier, float accelerationModifier = 1, float trackingSpeed = 1f, 
+        float maximumAngle = 360, float minimumDistance = 0.5f
+    ): this(speedModifier, accelerationModifier, trackingSpeed, maximumAngle, minimumDistance)
     {
-        _speedModifier = speedModifier;
-        _accelerationModifier = accelerationModifier;
-        _steeringSpeed = trackingSpeed;
-        _maximumAngle = maximumAngle;
-        _minimumDistance = minimumDistance;
         _targetObject = targetObject;
         _targetPosition = _targetObject.Position;
+    }
+    public MoveTowards(
+        float speedModifier, float accelerationModifier, float trackingSpeed, 
+        float maximumAngle, float minimumDistance
+    ) {
+        _speedModifier = speedModifier;
+        _accelerationModifier = accelerationModifier;
+        _steeringSpeed = trackingSpeed / 10;
+        _maximumAngle = maximumAngle;
+        _minimumDistance = minimumDistance;
     }
 
     //Methods
@@ -78,6 +86,6 @@ public class MoveTowards: iEnemyAction
         _desiredDirection = GetSteeringVector(target.DesiredSpeed, target.Position, target.CurrentVelocity);
     }
     public void OnStart(iEnemy target) { return; }
-    public void OnFinish(iEnemy target) { target.Move(Vector2.zero, target.DesiredSpeed, target.CurrentAcceleration * 1000); }
+    public void OnFinish(iEnemy target) { target.Move(Vector2.zero, target.DesiredSpeed, target.CurrentAcceleration); }
     #endregion
 }
