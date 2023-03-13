@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 public interface iEnemyAction
 {
-	public bool CheckCondition(Enemy target);
-    public void Update(Enemy target);
-    public void FixedUpdate(Enemy target);
-    public void OnStart(Enemy target);
-    public void OnFinish(Enemy target);
+	public bool CheckCondition(iEnemy target);
+    public void Update(iEnemy target);
+    public void FixedUpdate(iEnemy target);
+    public void OnStart(iEnemy target);
+    public void OnFinish(iEnemy target);
 }
 
 [Serializable]
