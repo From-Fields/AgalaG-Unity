@@ -26,6 +26,8 @@ public class Player : MonoBehaviour, Entity
     private float _defaultAcceleration = 10;
     public List<PowerUp> powerUps;
 
+    public System.Action onDeath;
+
     // References
     private InputHandler _inputHandler => InputHandler.Instance;
     private Rigidbody2D _rigidbody;
@@ -68,6 +70,7 @@ public class Player : MonoBehaviour, Entity
     }
     public void Die() {
         gameObject.SetActive(false);
+        this.onDeath?.Invoke();
         this.isDead = true;
     }
 

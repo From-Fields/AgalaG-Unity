@@ -10,7 +10,7 @@ public class WaveController
     public Action onWaveDone;
     private List<iWaveUnit> unitList;
 
-    public bool IsoDone => _isDone;
+    public bool IsDone => _isDone;
 
     public WaveController(float timeout, List<iWaveUnit> unitList)
     {
