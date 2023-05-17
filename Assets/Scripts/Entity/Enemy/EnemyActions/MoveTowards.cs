@@ -21,39 +21,51 @@ public class MoveTowards: iEnemyAction
     private Vector2 _targetPosition;
     private Vector2 _desiredDirection = Vector2.zero;
 
+    private bool _stopOnEnd = true;
+    private bool _decelerate = false;
+    private float _decelerationRadius = 2f;
+
     //Constructors
-    public MoveTowards(Vector2 targetPosition): this(targetPosition, 1, 1, 1f, 360, 0.5f) { }
-    public MoveTowards(Entity target): this(target, 1, 1, 1f, 360, 0.5f) { }
+    public MoveTowards(Vector2 targetPosition, bool decelerate = true, float decelerationRadius = 2, bool stopOnEnd = true): 
+        this(targetPosition, 1, decelerate: decelerate, decelerationRadius: decelerationRadius) { }
+    public MoveTowards(Entity target, bool decelerate = false, float decelerationRadius = -1, bool stopOnEnd = false): 
+        this(target, 1, decelerate: decelerate, decelerationRadius: decelerationRadius) { }
     public MoveTowards(Vector2 targetPosition,
         float speedModifier, float accelerationModifier = 1, float trackingSpeed = 1f, 
-        float maximumAngle = 360, float minimumDistance = 0.5f
-    ) : this(speedModifier, accelerationModifier, trackingSpeed, maximumAngle, minimumDistance)
+        float maximumAngle = 360, float minimumDistance = 0.25f,
+        bool decelerate = true, float decelerationRadius = 2f, bool stopOnEnd = true
+    ) : this(speedModifier, accelerationModifier, trackingSpeed, maximumAngle, minimumDistance, decelerate, decelerationRadius, stopOnEnd)
     {
         _targetPosition = targetPosition;
         _targetObject = null;
     }
     public MoveTowards(Entity targetObject,
         float speedModifier, float accelerationModifier = 1, float trackingSpeed = 1f, 
-        float maximumAngle = 360, float minimumDistance = 0.5f
-    ): this(speedModifier, accelerationModifier, trackingSpeed, maximumAngle, minimumDistance)
+        float maximumAngle = 360, float minimumDistance = 0.25f,
+        bool decelerate = false, float decelerationRadius = -1, bool stopOnEnd = false
+    ): this(speedModifier, accelerationModifier, trackingSpeed, maximumAngle, minimumDistance, decelerate, decelerationRadius, stopOnEnd)
     {
         _targetObject = targetObject;
         _targetPosition = _targetObject.Position;
     }
     public MoveTowards(
         float speedModifier, float accelerationModifier, float trackingSpeed, 
-        float maximumAngle, float minimumDistance
+        float maximumAngle, float minimumDistance, bool decelerate, float decelerationRadius, bool stopOnEnd
     ) {
         _speedModifier = speedModifier;
         _accelerationModifier = accelerationModifier;
         _steeringSpeed = trackingSpeed / 10;
         _maximumAngle = maximumAngle;
         _minimumDistance = minimumDistance;
+        _decelerate = decelerate;
+        _decelerationRadius = decelerationRadius;
+        _stopOnEnd = stopOnEnd;
     }
 
     //Methods
     private Vector2 GetSteeringVector(float speed, Vector2 currentPosition, Vector2 currentVelocity)
     {
+        float steeringMultiplier = _steeringSpeed;
         //Calculates velocity in a straight line towards target
         Vector2 desiredVelocity = (_targetPosition - currentPosition).normalized * speed * _speedModifier;
 
@@ -65,7 +77,17 @@ public class MoveTowards: iEnemyAction
 
         //Calculates the hypotenuse vector between the current and desired velocities, multiplied by the turning speed.
         //Returns this normalized value.
-        Vector2 steeringVector = (desiredVelocity - currentVelocity) * _steeringSpeed * Time.fixedDeltaTime;
+        Vector2 steeringVector = (desiredVelocity - currentVelocity) * steeringMultiplier;
+
+        if(_decelerate) {
+            float decelerationMultiplier = 1;
+            float distance = Vector2.Distance(currentPosition, _targetPosition);
+            if(distance <= _decelerationRadius) {
+                decelerationMultiplier = Mathf.Clamp(distance - _minimumDistance, 0, distance) / _decelerationRadius;
+                steeringVector *= decelerationMultiplier;
+            }
+            Debug.Log(distance + " vector: " + _targetPosition + " Multiplier: " + decelerationMultiplier);
+        }
 
         return (currentVelocity + steeringVector).normalized;
     }
@@ -86,6 +108,9 @@ public class MoveTowards: iEnemyAction
         _desiredDirection = GetSteeringVector(target.DesiredSpeed, target.Position, target.CurrentVelocity);
     }
     public void OnStart(iEnemy target) { return; }
-    public void OnFinish(iEnemy target) { target.Move(Vector2.zero, target.DesiredSpeed, target.CurrentAcceleration); }
+    public void OnFinish(iEnemy target) { 
+        if(_stopOnEnd)
+            target.Stop(); 
+    }
     #endregion
 }

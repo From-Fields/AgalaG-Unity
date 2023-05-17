@@ -49,6 +49,7 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
     public override Rigidbody2D Rigidbody => _rigidbody;
     public override void Move(Vector2 direction, float speed, float acceleration) =>
         _rigidbody.velocity = Vector2.Lerp(_rigidbody.velocity, direction * speed * Time.fixedDeltaTime, Time.fixedDeltaTime * acceleration);
+    public override void Stop() => _rigidbody.velocity = Vector2.zero;
     public override void Shoot() {
         _weapon.Shoot();
     }
@@ -77,17 +78,15 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
         Vector2 fromChild = (Position - _parent.Position).normalized;
         Vector2 toChild = (_parent.Position - Position).normalized;
         Vector2 tangent = (Quaternion.Euler(0, 0, 90) * fromChild).normalized;
-        float offsetMultiplier = (_velocityMultiplier + (_positionOffset * 5 / 4));
+        float offsetMultiplier = (_velocityMultiplier + (_positionOffset * 3 / 2));
         float acceleration = _parent.CurrentAcceleration;
 
         if(Vector2.Distance(Position, _parent.Position) > _positionOffset)
             Move(toChild, _orbitingVelocity * offsetMultiplier, acceleration);
-        else
-            Move(fromChild, _orbitingVelocity * offsetMultiplier, acceleration);
+        // else
+        //     Move(fromChild, _orbitingVelocity * offsetMultiplier, acceleration);
 
         Move(tangent, _orbitingVelocity * _velocityMultiplier, acceleration);
-
-        Debug.Log(Vector2.Distance(Position, _parent.Position));
 
         this._fromChild = toChild;
         this._tangent = tangent;

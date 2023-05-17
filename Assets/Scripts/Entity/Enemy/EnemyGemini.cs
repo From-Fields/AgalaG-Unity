@@ -44,9 +44,10 @@ public class EnemyGemini : Enemy<EnemyGemini>
     public override void Move(Vector2 direction, float speed, float acceleration) {
         _rigidbody.velocity = Vector2.Lerp(_rigidbody.velocity, direction * speed * Time.fixedDeltaTime, Time.fixedDeltaTime * acceleration);
         foreach(var child in _children) {
-            child.Move(direction, speed, acceleration);
+            // child.Move(direction, speed, acceleration);
         }
     }
+    public override void Stop() => _rigidbody.velocity = Vector2.zero;
     public override void Shoot() {
         foreach (var child in _children) {
             child.Shoot();

@@ -57,6 +57,7 @@ public class EnemyKamikaze: Enemy<EnemyKamikaze>
 
     public override void Move(Vector2 direction, float speed, float acceleration) =>
         _rigidbody.velocity = Vector2.Lerp(_rigidbody.velocity, direction * speed * Time.fixedDeltaTime, Time.fixedDeltaTime * acceleration);
+    public override void Stop() => _rigidbody.velocity = Vector2.zero;
     public override void Shoot() { }
     public override void TakeDamage(int damage)
     {

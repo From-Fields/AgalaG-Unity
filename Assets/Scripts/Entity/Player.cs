@@ -61,6 +61,7 @@ public class Player : MonoBehaviour, Entity
 
         _rigidbody.velocity = Vector2.Lerp(_rigidbody.velocity, destination, Time.fixedDeltaTime * acceleration);
     }
+    public void Stop() => _rigidbody.velocity = Vector2.zero;
     public void Shoot() => currentWeapon.Shoot();
     public void TakeDamage(int damage) {
         this._currentHealth -= damage;

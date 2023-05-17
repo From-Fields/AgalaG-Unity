@@ -137,6 +137,7 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
     public abstract Vector2 Position { get; }
 
     public abstract void Move(Vector2 direction, float speed, float acceleration);
+    public abstract void Stop();
     public abstract void Shoot();
     public abstract void TakeDamage(int damage);
     public void Die()
