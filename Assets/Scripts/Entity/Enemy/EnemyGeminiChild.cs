@@ -23,6 +23,7 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
     //References
     private Rigidbody2D _rigidbody;
     private EnemyGemini _parent;
+    private Vector2 _desiredVelocity;
 
     //Initialization Methods
     public void SetParent(EnemyGemini parent, float positionOffset, float orbitingVelocity) {
@@ -30,8 +31,8 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
         this._positionOffset = positionOffset;
         this._orbitingVelocity = orbitingVelocity;
     }
-    public void SetWeapon(float weaponCooldown) {
-        this._weapon.SetAttributes(cooldown: weaponCooldown, direction: Vector2.down);
+    public void SetWeapon(float weaponCooldown, int missileDamage) {
+        this._weapon.SetAttributes(damage: missileDamage, cooldown: weaponCooldown, direction: Vector2.down);
     }
 
     //Unity Hooks
@@ -48,10 +49,15 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
     //iEnemy
     public override Rigidbody2D Rigidbody => _rigidbody;
     public override void Move(Vector2 direction, float speed, float acceleration) =>
-        _rigidbody.velocity = Vector2.Lerp(_rigidbody.velocity, direction * speed * Time.fixedDeltaTime, Time.fixedDeltaTime * acceleration);
-    public override void Stop() => _rigidbody.velocity = Vector2.zero;
+        _desiredVelocity = direction * speed;
+    public override void Stop() {}
     public override void Shoot() {
-        _weapon.Shoot();
+        float currentOffset = Position.x - _parent.Position.x;
+        Debug.Log("Shoot!");
+        
+        if(Math.Abs(currentOffset) >= (0.9f * _positionOffset))
+            _weapon.Shoot();
+
     }
     public override void TakeDamage(int damage) {
         damage = Math.Clamp(damage, 0, 1);
@@ -74,25 +80,41 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
     protected override void SubReserve() {
         this._parent.TakeDamage(1);
     }
-    protected override void SubFixedUpdate() {
+    protected override void SubUpdate() {
         Vector2 fromChild = (Position - _parent.Position).normalized;
         Vector2 toChild = (_parent.Position - Position).normalized;
         Vector2 tangent = (Quaternion.Euler(0, 0, 90) * fromChild).normalized;
-        float offsetMultiplier = (_velocityMultiplier + (_positionOffset * 3 / 2));
-        float acceleration = _parent.CurrentAcceleration;
 
-        if(Vector2.Distance(Position, _parent.Position) > _positionOffset)
-            Move(toChild, _orbitingVelocity * offsetMultiplier, acceleration);
-        // else
-        //     Move(fromChild, _orbitingVelocity * offsetMultiplier, acceleration);
-
-        Move(tangent, _orbitingVelocity * _velocityMultiplier, acceleration);
-
-        this._fromChild = toChild;
+        this._toChild = toChild;
+        this._fromChild = fromChild;
         this._tangent = tangent;
     }
+    protected override void SubFixedUpdate() {
+        if(!_toChild.HasValue || !_fromChild.HasValue || !_tangent.HasValue)
+            return;
+        float distance = Vector2.Distance(Position, _parent.Position);
+        float offsetMultiplier = (_velocityMultiplier * distance/_positionOffset);
+        float acceleration = _parent.CurrentAcceleration;
 
-    private Vector2? _fromChild, _tangent;
+        Vector2 _desiredOrbit = _tangent.Value * _orbitingVelocity * _velocityMultiplier * 2 * MathF.PI * _positionOffset / distance;
+
+        // if(distance > _positionOffset)
+            _desiredOrbit += (_toChild.Value * _orbitingVelocity * offsetMultiplier);
+        // else
+        //     _desiredOrbit += (_fromChild.Value * _orbitingVelocity * offsetMultiplier);
+
+        if(_desiredVelocity != Vector2.zero) {
+            _desiredOrbit += _desiredVelocity;
+            _desiredVelocity = Vector2.zero;
+        }
+
+        _desiredOrbit *= Time.fixedDeltaTime;
+        _desiredOrbit += _parent.CurrentVelocity;
+
+        _rigidbody.velocity = Vector2.Lerp(_rigidbody.velocity, _desiredOrbit, Time.fixedDeltaTime * acceleration);
+    }
+
+    private Vector2? _toChild, _fromChild, _tangent;
     
     //iPoolableEntity
     public override EnemyGeminiChild OnCreate() => Instantiate<EnemyGeminiChild>(EntityPool<EnemyGeminiChild>.Instance.ObjReference);
@@ -102,9 +124,9 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
     #endregion
 
     private void OnDrawGizmos() {
-        if(_fromChild.HasValue) {
+        if(_toChild.HasValue) {
             Gizmos.color = Color.blue;
-            Gizmos.DrawLine(Position, Position + _fromChild.Value);
+            Gizmos.DrawLine(Position, Position + _toChild.Value);
         }
         if(_tangent.HasValue) {
             Gizmos.color = Color.yellow;

@@ -8,22 +8,22 @@ public class MoveTowards: iEnemyAction
 {
     //Attributes
     [SerializeField]
-    private float _speedModifier;
+    protected float _speedModifier;
     [SerializeField]
-    private float _accelerationModifier;
+    protected float _accelerationModifier;
     [SerializeField]
-    private float _steeringSpeed;
+    protected float _steeringSpeed;
     [SerializeField]
-    private float _maximumAngle;
+    protected float _maximumAngle;
     [SerializeField]
-    private float _minimumDistance;
-    private Entity _targetObject;
-    private Vector2 _targetPosition;
-    private Vector2 _desiredDirection = Vector2.zero;
+    protected float _minimumDistance;
+    protected Entity _targetObject;
+    protected Vector2 _targetPosition;
+    protected Vector2 _desiredDirection = Vector2.zero;
 
-    private bool _stopOnEnd = true;
-    private bool _decelerate = false;
-    private float _decelerationRadius = 2f;
+    protected bool _stopOnEnd = true;
+    protected bool _decelerate = false;
+    protected float _decelerationRadius = 2f;
 
     //Constructors
     public MoveTowards(Vector2 targetPosition, bool decelerate = true, float decelerationRadius = 2, bool stopOnEnd = true): 
@@ -63,7 +63,7 @@ public class MoveTowards: iEnemyAction
     }
 
     //Methods
-    private Vector2 GetSteeringVector(float speed, Vector2 currentPosition, Vector2 currentVelocity)
+    protected Vector2 GetSteeringVector(float speed, Vector2 currentPosition, Vector2 currentVelocity)
     {
         float steeringMultiplier = _steeringSpeed;
         //Calculates velocity in a straight line towards target
@@ -86,7 +86,7 @@ public class MoveTowards: iEnemyAction
                 decelerationMultiplier = Mathf.Clamp(distance - _minimumDistance, 0, distance) / _decelerationRadius;
                 steeringVector *= decelerationMultiplier;
             }
-            Debug.Log(distance + " vector: " + _targetPosition + " Multiplier: " + decelerationMultiplier);
+            // Debug.Log(distance + " vector: " + _targetPosition + " Multiplier: " + decelerationMultiplier);
         }
 
         return (currentVelocity + steeringVector).normalized;
@@ -96,11 +96,11 @@ public class MoveTowards: iEnemyAction
     //Behaviour ends if distance is less than the desired distance.
     //Desired direction is calculated on Update, applied on FixedUpdate.
     public bool CheckCondition(iEnemy target) => Vector2.Distance(target.Position, _targetPosition) <= _minimumDistance; 
-    public void FixedUpdate(iEnemy target) 
+    public virtual void FixedUpdate(iEnemy target) 
     {
         target.Move(_desiredDirection, target.DesiredSpeed * _speedModifier, target.CurrentAcceleration * _accelerationModifier);
     }
-    public void Update(iEnemy target) 
+    public virtual void Update(iEnemy target) 
     {
         if(_targetObject != null)
             this._targetPosition = _targetObject.Position;

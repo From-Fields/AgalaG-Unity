@@ -47,7 +47,12 @@ public class EnemyGemini : Enemy<EnemyGemini>
             // child.Move(direction, speed, acceleration);
         }
     }
-    public override void Stop() => _rigidbody.velocity = Vector2.zero;
+    public override void Stop() {
+        _rigidbody.velocity = Vector2.zero;
+        foreach(var child in _children) {
+            // child.Stop();
+        }
+    } 
     public override void Shoot() {
         foreach (var child in _children) {
             child.Shoot();
@@ -83,7 +88,7 @@ public class EnemyGemini : Enemy<EnemyGemini>
 
             child.Initialize(new Queue<iEnemyAction>(), null, new WaitSeconds(200), position);
             child.SetParent(this, _geminiPositionOffset, _orbitingVelocity);
-            child.SetWeapon(_weaponCooldown);
+            child.SetWeapon(_weaponCooldown, _geminiMissileDamage);
         }
     }
     public override void Reserve() => Pool.Release(this);

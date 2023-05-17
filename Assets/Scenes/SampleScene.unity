@@ -701,7 +701,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4162257234678357608, guid: 359c2f20be12abb4d84b86fb71fb869d, type: 3}
       propertyPath: _orbitingVelocity
-      value: 20
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4162257234678357608, guid: 359c2f20be12abb4d84b86fb71fb869d, type: 3}
       propertyPath: _geminiPositionOffset
@@ -814,7 +814,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7898619899506655667, guid: c0fe752241468b042a3c0e1ffc83ae97, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c0fe752241468b042a3c0e1ffc83ae97, type: 3}

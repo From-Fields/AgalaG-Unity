@@ -51,7 +51,8 @@ public class Bullet : MonoBehaviour
         _speed = speed;
         _shooter = shooter;
         _sprite = sprite ?? _sprite;
-        _spriteRenderer.sprite = _sprite;
+        if(_spriteRenderer != null)
+            _spriteRenderer.sprite = _sprite;
         _damage = (damage > 0) ? damage : _damage;
 
         gameObject.SetActive(true);

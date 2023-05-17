@@ -12,9 +12,9 @@ public class GeminiTest : MonoBehaviour
     {
         _enemy?.Initialize( new Queue<iEnemyAction>(
             new[] {
-                new MoveTowards(new Vector2(0.75f, 3.24f), speedModifier: 1, trackingSpeed: 10, stopOnEnd: false),
-                new MoveTowards(new Vector2(0.75f, 3.5f), speedModifier: 1, trackingSpeed: 10, stopOnEnd: false),
-                new MoveTowards(new Vector2(-0.75f, 2.24f), speedModifier: 1, trackingSpeed: 10)
+                new MoveAndShoot(new Vector2(2.75f, 3.25f), speedModifier: 1, trackingSpeed: 10, stopOnEnd: false),
+                new MoveAndShoot(new Vector2(0.75f, 1.25f), speedModifier: 1, trackingSpeed: 10, stopOnEnd: false),
+                new MoveAndShoot(new Vector2(-1.75f, -1.25f), speedModifier: 1, trackingSpeed: 10)
             }), 
             new Shoot(2), new WaitSeconds(20) , _enemy.Position
         );
