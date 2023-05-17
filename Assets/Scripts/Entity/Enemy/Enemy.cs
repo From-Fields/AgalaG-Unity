@@ -96,11 +96,17 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
         this.transform.position = Vector3.zero;
         this.Rigidbody.velocity = Vector3.zero;
         this.gameObject.SetActive(false);
+        this.SubReserve();
     }
 
     //Abstract Methods
     protected abstract void SubInitialize();
     public abstract void Reserve();
+
+    //Virtual Methods
+    protected virtual void SubReserve() { }
+    protected virtual void SubUpdate() { }
+    protected virtual void SubFixedUpdate() { }
 
     //Unity Hooks
     public void Update()
@@ -112,7 +118,7 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
             ExecuteNextAction();
 
         _currentAction?.Update(this);
-
+        SubUpdate();
     }
     public void FixedUpdate()
     {
@@ -121,6 +127,7 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
         
         if(!_currentAction.CheckCondition(this))
             _currentAction.FixedUpdate(this);
+        SubFixedUpdate();
     }
 
     #region Interface Implementation

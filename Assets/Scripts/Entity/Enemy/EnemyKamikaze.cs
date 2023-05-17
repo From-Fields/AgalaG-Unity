@@ -51,7 +51,7 @@ public class EnemyKamikaze: Enemy<EnemyKamikaze>
 
     #region InterfaceImplementation
     //iEntity
-    public override int health => 0;
+    public override int health => _currentHealth;
     public override Vector2 CurrentVelocity => _rigidbody.velocity;
     public override Vector2 Position => _rigidbody.position;
 
