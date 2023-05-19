@@ -46,8 +46,8 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_LinearDrag: 0.1
+  m_AngularDrag: 0
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
@@ -67,11 +67,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 0
+  _defaultCollisionDamage: 1
   _defaultSpeed: 100
   _defaultAcceleration: 10
   _currentAcceleration: 0
-  _geminiMissileDamage: 1
   _geminiPositionOffset: 1
+  _orbitingVelocity: 1
+  _geminiMissileDamage: 1
   _weaponCooldown: 1
-  _orbitingVelocity: 20
+  _missileSpeed: 3.5
   _defaultHealth: 2

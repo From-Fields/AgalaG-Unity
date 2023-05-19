@@ -9,10 +9,15 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
     //Attributes
     public int score;
 
+    //Damage
+    [Header("Damage")][SerializeField]
+    protected int _defaultCollisionDamage = 1;
+    protected int _collisionDamage;
+
     //Speed
-    [SerializeField]
+    [Header("Movement")][SerializeField]
     protected float _defaultSpeed = 100;
-    protected float _currentSpeed;    
+    protected float _currentSpeed;
 
     //Acceleration
     [SerializeField]
@@ -107,6 +112,16 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
     protected virtual void SubReserve() { }
     protected virtual void SubUpdate() { }
     protected virtual void SubFixedUpdate() { }
+    protected virtual void OnCollision(Collision2D other) {
+        Entity entity = other.gameObject.GetComponentInChildren<Entity>();
+
+        Debug.Log("collision");
+
+        if(entity != null) {
+            entity.TakeDamage(this._collisionDamage);
+            this.Die();
+        }
+    }
 
     //Unity Hooks
     public void Update()
@@ -128,6 +143,12 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
         if(!_currentAction.CheckCondition(this))
             _currentAction.FixedUpdate(this);
         SubFixedUpdate();
+    }
+    public void OnCollisionEnter2D(Collision2D other)  {
+        if(_isDead)
+            return;
+
+        OnCollision(other);
     }
 
     #region Interface Implementation

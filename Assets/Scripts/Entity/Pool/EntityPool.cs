@@ -11,8 +11,10 @@ public class EntityPool<T> : Singleton<EntityPool<T>> where T: MonoBehaviour, iP
 
     public IObjectPool<T> Pool {
         get {
-            if(_pool == null)
+            if(_pool == null) {
                 _pool = new ObjectPool<T>(ObjReference.OnCreate, ObjReference.onGetFromPool, ObjReference.onReleaseToPool);
+                UnityEngine.SceneManagement.SceneManager.activeSceneChanged += (_, __) => _pool.Clear();
+            }
 
             return _pool;
         }

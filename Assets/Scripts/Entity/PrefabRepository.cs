@@ -8,8 +8,8 @@ public class PrefabRepository : SingletonMonoBehaviour<PrefabRepository>
     [Header("Enemies")]
     [SerializeField]
     private EnemyKamikaze _kamikazePrefab;
-    // [SerializeField]
-    // private EnemyBumblebee _bumblebeePrefab;
+    [SerializeField]
+    private EnemyBumblebee _bumblebeePrefab;
     [SerializeField]
     private EnemyGemini _geminiPrefab;
     [SerializeField]
@@ -22,9 +22,9 @@ public class PrefabRepository : SingletonMonoBehaviour<PrefabRepository>
         if(t == typeof(EnemyKamikaze)) {
             return _kamikazePrefab.gameObject;
         }
-        // if(t == typeof(EnemyBumblebee)) {
-            // return _bumblebeePrefab.gameObject;
-        // }
+        if(t == typeof(EnemyBumblebee)) {
+            return _bumblebeePrefab.gameObject;
+        }
         if(t == typeof(EnemyGemini)) {
             return _geminiPrefab.gameObject;
         }

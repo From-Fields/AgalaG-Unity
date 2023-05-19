@@ -12,8 +12,7 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
     [SerializeField]
     private float _velocityMultiplier = 20;
     private float _orbitingVelocity;
-    [SerializeField]
-    private DefaultWeapon _weaponPrefab;
+    [Header("Weapon")][SerializeField]
     private DefaultWeapon _weapon;
 
     //Health
@@ -23,7 +22,7 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
     //References
     private Rigidbody2D _rigidbody;
     private EnemyGemini _parent;
-    private Vector2 _desiredVelocity;
+    private Vector2? _desiredVelocity;
 
     //Initialization Methods
     public void SetParent(EnemyGemini parent, float positionOffset, float orbitingVelocity) {
@@ -31,8 +30,8 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
         this._positionOffset = positionOffset;
         this._orbitingVelocity = orbitingVelocity;
     }
-    public void SetWeapon(float weaponCooldown, int missileDamage) {
-        this._weapon.SetAttributes(damage: missileDamage, cooldown: weaponCooldown, direction: Vector2.down);
+    public void SetWeapon(float weaponCooldown, int missileDamage, float missileSpeed) {
+        this._weapon.SetAttributes(damage: missileDamage, cooldown: weaponCooldown, speed: missileSpeed, direction: Vector2.down);
     }
 
     //Unity Hooks
@@ -50,18 +49,17 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
     public override Rigidbody2D Rigidbody => _rigidbody;
     public override void Move(Vector2 direction, float speed, float acceleration) =>
         _desiredVelocity = direction * speed;
-    public override void Stop() {}
+    public override void Stop() {
+        _desiredVelocity = Vector2.zero;
+    }
     public override void Shoot() {
         float currentOffset = Position.x - _parent.Position.x;
-        Debug.Log("Shoot!");
+        // Debug.Log("Shoot!");
         
         if(Math.Abs(currentOffset) >= (0.9f * _positionOffset))
             _weapon.Shoot();
-
     }
     public override void TakeDamage(int damage) {
-        damage = Math.Clamp(damage, 0, 1);
-
         _currentHealth = Math.Clamp(_currentHealth - damage, 0, _maxHealth);
 
         if(_currentHealth == 0)
@@ -73,9 +71,9 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
         this._currentSpeed = _defaultSpeed;
         this._currentAcceleration = _defaultAcceleration;
 
-        _isDead = false;
-        _currentHealth = _maxHealth;
-        _weapon = _weaponPrefab;
+        this._isDead = false;
+        this._currentHealth = this._maxHealth;
+        this._collisionDamage = this._defaultCollisionDamage;
     }
     protected override void SubReserve() {
         this._parent.TakeDamage(1);
@@ -103,13 +101,16 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
         // else
         //     _desiredOrbit += (_fromChild.Value * _orbitingVelocity * offsetMultiplier);
 
-        if(_desiredVelocity != Vector2.zero) {
-            _desiredOrbit += _desiredVelocity;
-            _desiredVelocity = Vector2.zero;
+        if(_desiredVelocity.HasValue) {
+            if(_desiredVelocity == Vector2.zero)
+                _desiredVelocity = null;
+            else {
+                _desiredOrbit += _desiredVelocity.Value;
+                _desiredVelocity = Vector2.zero;
+            }
         }
 
         _desiredOrbit *= Time.fixedDeltaTime;
-        _desiredOrbit += _parent.CurrentVelocity;
 
         _rigidbody.velocity = Vector2.Lerp(_rigidbody.velocity, _desiredOrbit, Time.fixedDeltaTime * acceleration);
     }

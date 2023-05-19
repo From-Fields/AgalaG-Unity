@@ -24,6 +24,7 @@ public class MoveTowards: iEnemyAction
     protected bool _stopOnEnd = true;
     protected bool _decelerate = false;
     protected float _decelerationRadius = 2f;
+    private float _decelerationMultiplier = 1;
 
     //Constructors
     public MoveTowards(Vector2 targetPosition, bool decelerate = true, float decelerationRadius = 2, bool stopOnEnd = true): 
@@ -69,6 +70,7 @@ public class MoveTowards: iEnemyAction
         //Calculates velocity in a straight line towards target
         Vector2 desiredVelocity = (_targetPosition - currentPosition).normalized * speed * _speedModifier;
 
+        _decelerationMultiplier = 1;
         //Calculates angle between velocity calculated above and current, actual velocity.
         //If this value is greater than the desired maximum angle, velocity is unaltered.
         float angle = Vector2.Angle(currentVelocity.normalized, desiredVelocity.normalized);
@@ -80,13 +82,11 @@ public class MoveTowards: iEnemyAction
         Vector2 steeringVector = (desiredVelocity - currentVelocity) * steeringMultiplier;
 
         if(_decelerate) {
-            float decelerationMultiplier = 1;
             float distance = Vector2.Distance(currentPosition, _targetPosition);
             if(distance <= _decelerationRadius) {
-                decelerationMultiplier = Mathf.Clamp(distance - _minimumDistance, 0, distance) / _decelerationRadius;
-                steeringVector *= decelerationMultiplier;
+                _decelerationMultiplier = Mathf.Clamp(distance, 0, distance) / _decelerationRadius;
             }
-            // Debug.Log(distance + " vector: " + _targetPosition + " Multiplier: " + decelerationMultiplier);
+            Debug.Log(distance + " vector: " + _targetPosition);
         }
 
         return (currentVelocity + steeringVector).normalized;
@@ -98,7 +98,7 @@ public class MoveTowards: iEnemyAction
     public bool CheckCondition(iEnemy target) => Vector2.Distance(target.Position, _targetPosition) <= _minimumDistance; 
     public virtual void FixedUpdate(iEnemy target) 
     {
-        target.Move(_desiredDirection, target.DesiredSpeed * _speedModifier, target.CurrentAcceleration * _accelerationModifier);
+        target.Move(_desiredDirection, target.DesiredSpeed * _speedModifier * _decelerationMultiplier, target.CurrentAcceleration * _accelerationModifier);
     }
     public virtual void Update(iEnemy target) 
     {

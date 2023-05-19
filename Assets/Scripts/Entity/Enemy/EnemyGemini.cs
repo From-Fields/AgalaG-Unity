@@ -8,17 +8,19 @@ using UnityEngine.Pool;
 public class EnemyGemini : Enemy<EnemyGemini>
 {
     //Attributes
+    [Header("Child Settings")][SerializeField]
+    private float _geminiPositionOffset = 0.5f;
+    [SerializeField]
+    private float _orbitingVelocity = 1f;
     [SerializeField]
     private int _geminiMissileDamage = 1;
     [SerializeField]
-    private float _geminiPositionOffset = 0.5f;
-    [SerializeField]
     private float _weaponCooldown = 1f;
     [SerializeField]
-    private float _orbitingVelocity = 1f;
+    private float _missileSpeed = 4f;
 
     //Health
-    [SerializeField]
+    [Header("Health")][SerializeField]
     private int _defaultHealth = 2;
     private int _currentHealth;
     private int _maxHealth;
@@ -44,15 +46,11 @@ public class EnemyGemini : Enemy<EnemyGemini>
     public override void Move(Vector2 direction, float speed, float acceleration) {
         _rigidbody.velocity = Vector2.Lerp(_rigidbody.velocity, direction * speed * Time.fixedDeltaTime, Time.fixedDeltaTime * acceleration);
         foreach(var child in _children) {
-            // child.Move(direction, speed, acceleration);
+            child.Move(direction, speed, acceleration);
         }
     }
-    public override void Stop() {
-        _rigidbody.velocity = Vector2.zero;
-        foreach(var child in _children) {
-            // child.Stop();
-        }
-    } 
+    public override void Stop() =>
+        _rigidbody.velocity = Vector2.Lerp(_rigidbody.velocity, Vector2.zero, 0.99f);
     public override void Shoot() {
         foreach (var child in _children) {
             child.Shoot();
@@ -66,6 +64,7 @@ public class EnemyGemini : Enemy<EnemyGemini>
         if(_currentHealth == 0)
             Die();
     }
+    protected override void OnCollision(Collision2D other) { /*Do Nothing*/}
     
     //iPoolableEntity
     public override EnemyGemini OnCreate() => Instantiate<EnemyGemini>(EntityPool<EnemyGemini>.Instance.ObjReference);
@@ -76,9 +75,9 @@ public class EnemyGemini : Enemy<EnemyGemini>
         this._currentSpeed = _defaultSpeed;
         this._currentAcceleration = _defaultAcceleration;
 
-        _isDead = false;
-        _maxHealth = _defaultHealth;
-        _currentHealth = _defaultHealth;
+        this._isDead = false;
+        this._maxHealth = this._defaultHealth;
+        this._currentHealth = this._defaultHealth;
 
         for (int i = 0; i < _defaultHealth; i++) {
             this._children.Add(_childPool.Get());
@@ -88,17 +87,22 @@ public class EnemyGemini : Enemy<EnemyGemini>
 
             child.Initialize(new Queue<iEnemyAction>(), null, new WaitSeconds(200), position);
             child.SetParent(this, _geminiPositionOffset, _orbitingVelocity);
-            child.SetWeapon(_weaponCooldown, _geminiMissileDamage);
+            child.SetWeapon(_weaponCooldown, _geminiMissileDamage, _missileSpeed);
         }
     }
     public override void Reserve() => Pool.Release(this);
     protected override void SubReserve() {
         base.SubReserve();
 
-        foreach (var child in _children) {
+        int childCount = _children.Count;
+
+        for (int i = 0; i < childCount; i++) {
+            EnemyGeminiChild child = _children[i];
+
             if(!child.IsDead)
                 child.Reserve();
         }
+
         _children.Clear();
     }
 
