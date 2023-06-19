@@ -24,7 +24,8 @@ public class WaveTest : MonoBehaviour
                     new MoveTowards(new Vector2(6, -6), 1.5f),
                     new Queue<iEnemyAction>(new [] {
                         new MoveTowards(new Vector2(2, 0), 1.5f, 1, 0.8f)
-                    })
+                    }),
+                    drop: new ShieldPowerUp()
                 ),
                 new WaveUnit<EnemyKamikaze>(
                     new Vector2(-5, 6),

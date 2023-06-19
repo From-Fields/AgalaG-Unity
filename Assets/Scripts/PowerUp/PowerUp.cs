@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public interface iPowerUp
 {
@@ -16,6 +17,8 @@ public interface iPowerUp
 public abstract class PowerUp: iPowerUp 
 {
     protected Player _player;
+    
+    public abstract Sprite Sprite { get; }
     public abstract bool IsInstant { get; }
 
     protected void EndPowerUp() => OnEnd();

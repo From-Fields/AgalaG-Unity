@@ -17,6 +17,11 @@ public class PrefabRepository : SingletonMonoBehaviour<PrefabRepository>
     [Header("Weapons")]
     [SerializeField]
     private DefaultWeapon _defaultWeaponPrefab;
+    [Header("PowerUps")]
+    [SerializeField]
+    private PickUp _pickupPrefab;
+    [SerializeField]
+    private Sprite _shieldPowerUp, _repairPowerUp;
 
     public GameObject GetPrefabOfType(Type t) {
         if(t == typeof(EnemyKamikaze)) {
@@ -38,6 +43,21 @@ public class PrefabRepository : SingletonMonoBehaviour<PrefabRepository>
 
         if(t == typeof(DefaultWeapon)) {
             return _defaultWeaponPrefab.gameObject;
+        }
+
+        if(t == typeof(PickUp)) {
+            return _pickupPrefab.gameObject;
+        }
+
+        return null;
+    }
+
+    public Sprite GetPowerUpOfType(Type t) {
+        if(t == typeof(ShieldPowerUp)) {
+            return _shieldPowerUp;
+        }
+        if(t == typeof(PickUp)) {
+            return _repairPowerUp;
         }
 
         return null;

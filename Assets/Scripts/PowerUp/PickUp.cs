@@ -2,9 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D))]
-public class PickUp : MonoBehaviour
+public class PickUp : MonoBehaviour, iPoolableObject<PickUp>
 {
     [SerializeField]
     private float _initialSpeed;
@@ -18,13 +19,14 @@ public class PickUp : MonoBehaviour
     private PickUpVisual _visuals;
 
     public void Initialize(
-        PowerUp powerUp, Vector2 direction, float speed, Sprite sprite, 
-        bool rotate = false, float rotationSpeed = 100f, 
-        bool doScale = false, float maximumScale = 1.3f, float scaleSpeed = 5f
+        PowerUp powerUp, Vector2 position, Vector2 direction, float speed = 5, 
+        bool rotate = true, float rotationSpeed = 100f, 
+        bool doScale = true, float maximumScale = 1.3f, float scaleSpeed = 5f
     ) {
         this._powerUp = powerUp;
+        transform.position = position;
         ApplyMovement(direction, speed);
-        this._visuals.Initialize(sprite, rotate, rotationSpeed, doScale, maximumScale, scaleSpeed);
+        this._visuals.Initialize(powerUp.Sprite, rotate, rotationSpeed, doScale, maximumScale, scaleSpeed);
     }
 
     // Movement Methods
@@ -65,7 +67,7 @@ public class PickUp : MonoBehaviour
         player.AddPowerUp(_powerUp);
 
         gameObject.SetActive(false);
-        Destroy(this, 0.1f);
+        Pool.Release(this);
     }
 
     private void OnValidate() {
@@ -75,6 +77,12 @@ public class PickUp : MonoBehaviour
             obj.transform.SetParent(transform);
         }
     }
+
+    // PoolableObject Implementation
+    public PickUp OnCreate() => Instantiate<PickUp>(SingletonObjectPool<PickUp>.Instance.ObjReference);
+    public Action<PickUp> onGetFromPool => null;
+    public Action<PickUp> onReleaseToPool => null;
+    public IObjectPool<PickUp> Pool => SingletonObjectPool<PickUp>.Instance.Pool;
     
     #if UNITY_EDITOR
         [SerializeField]

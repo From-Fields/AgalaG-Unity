@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class ShieldPowerUp : PowerUp
 {
+    public override Sprite Sprite => PrefabRepository.Instance.GetPowerUpOfType(typeof(ShieldPowerUp));
     public override bool IsInstant => false;
 
     public override void OnPickup(Player player) {

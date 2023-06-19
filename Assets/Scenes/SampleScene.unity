@@ -552,7 +552,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &762864520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -950,6 +950,9 @@ MonoBehaviour:
   _geminiPrefab: {fileID: 4162257234678357608, guid: 359c2f20be12abb4d84b86fb71fb869d, type: 3}
   _geminiChildPrefab: {fileID: 6106984641422381583, guid: f0b8b3d439cc1d243ad6d829011703b5, type: 3}
   _defaultWeaponPrefab: {fileID: 0}
+  _pickupPrefab: {fileID: 1969855797167298179, guid: 5f1b43da46e219346a0778ea340f47a5, type: 3}
+  _shieldPowerUp: {fileID: 21300000, guid: 93761cb23b331a0459e14924a19ab9dd, type: 3}
+  _repairPowerUp: {fileID: 21300000, guid: 3e78ffcfc69fc6b4b9076d2acd39ba64, type: 3}
 --- !u!4 &1528889790
 Transform:
   m_ObjectHideFlags: 0
@@ -992,7 +995,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1750801446
 Transform:
   m_ObjectHideFlags: 0
@@ -1330,7 +1333,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4162257234678357607, guid: 359c2f20be12abb4d84b86fb71fb869d, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4162257234678357610, guid: 359c2f20be12abb4d84b86fb71fb869d, type: 3}
       propertyPath: m_RootOrder

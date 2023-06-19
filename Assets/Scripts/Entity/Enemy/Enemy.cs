@@ -24,6 +24,10 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
     public float _defaultAcceleration = 10;
     public float _currentAcceleration;
 
+    //Drops
+    [SerializeField]
+    private PowerUp _droppedItem = null;
+
     protected bool _isDead;
 
     //Actions
@@ -67,7 +71,7 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
         if(_currentAction == null)
             Reserve();
     }
-    public void Initialize(Queue<iEnemyAction> actionQueue, iEnemyAction startingAction, iEnemyAction timeoutAction, Vector2 startingPoint)
+    public void Initialize(Queue<iEnemyAction> actionQueue, iEnemyAction startingAction, iEnemyAction timeoutAction, Vector2 startingPoint, PowerUp drop = null)
     {
         if(actionQueue == null || timeoutAction == null)
             throw new ArgumentNullException("Action queue and Timeout action may not be null");
@@ -78,6 +82,8 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
         this._startingAction = startingAction;
         this._timeoutAction = timeoutAction;
         this.transform.position = startingPoint;
+
+        this._droppedItem = drop;
 
         this.gameObject.SetActive(true);
 
@@ -164,6 +170,12 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
     public void Die()
     {
         onDeath?.Invoke(this.score);
+        
+        if(_droppedItem != null) {
+            Vector2 randomDirection = new Vector2(UnityEngine.Random.Range(-0.9f, 0.9f), UnityEngine.Random.Range(-0.9f, 0.9f)).normalized;
+            SingletonObjectPool<PickUp>.Instance.Pool.Get().Initialize(_droppedItem, Rigidbody.transform.position, randomDirection);
+        }
+
         Reserve();
     }
 

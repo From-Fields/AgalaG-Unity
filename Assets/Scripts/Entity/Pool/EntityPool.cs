@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class EntityPool<T> : Singleton<EntityPool<T>> where T: MonoBehaviour, iPoolableEntity<T>, Entity
+public class SingletonObjectPool<T> : Singleton<SingletonObjectPool<T>> where T: MonoBehaviour, iPoolableObject<T>
 {
     private IObjectPool<T> _pool;
     private GameObject _prefab;
@@ -38,3 +38,5 @@ public class EntityPool<T> : Singleton<EntityPool<T>> where T: MonoBehaviour, iP
         }
     }
 }
+
+public class EntityPool<T> : SingletonObjectPool<T> where T: MonoBehaviour, iPoolableEntity<T>, Entity {}
