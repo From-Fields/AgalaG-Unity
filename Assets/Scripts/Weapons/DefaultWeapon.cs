@@ -2,11 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class DefaultWeapon : Weapon
 {
     private bool _canShoot = true;
     private Vector2 _direction = Vector2.up;
+    
+    [SerializeField]
     private int _damage;
+    [SerializeField]
+    private int _layer = -1;
 
     protected override void Initialize() {
         _shooter = gameObject.tag;
@@ -24,6 +29,7 @@ public class DefaultWeapon : Weapon
         StartCooldown();
         
         bullet = Instantiate(bulletPrefab, spawnPoint[0].transform.position, Quaternion.identity).GetComponent<Bullet>();
+        bullet.gameObject.layer = (_layer != -1) ? _layer : gameObject.layer;
         bullet.Initialize(_direction, _speed, _shooter, damage: _damage);
     }
 
@@ -36,11 +42,12 @@ public class DefaultWeapon : Weapon
     }
     private void OnCooldownEnd() => _canShoot = true;
 
-    public void SetAttributes(Vector2? direction = null, int maxAmmunition = -1, float speed = -1, float cooldown = -1, int damage = -1) {
+    public void SetAttributes(Vector2? direction = null, int maxAmmunition = -1, float speed = -1, float cooldown = -1, int damage = -1, int layer = -1) {
         this._direction = direction.HasValue ? direction.Value : Vector2.up;
         this._maxAmmunition = (maxAmmunition != -1) ? maxAmmunition : _maxAmmunition;
         this._speed = (speed != -1) ? speed : _speed;
         this._cooldown = (cooldown != -1) ? cooldown : _cooldown;
         this._damage = (damage != -1)? damage : _damage;
+        this._layer = layer;
     }
 }

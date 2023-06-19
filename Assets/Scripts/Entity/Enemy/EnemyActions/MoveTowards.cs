@@ -86,7 +86,6 @@ public class MoveTowards: iEnemyAction
             if(distance <= _decelerationRadius) {
                 _decelerationMultiplier = Mathf.Clamp(distance, 0, distance) / _decelerationRadius;
             }
-            Debug.Log(distance + " vector: " + _targetPosition);
         }
 
         return (currentVelocity + steeringVector).normalized;

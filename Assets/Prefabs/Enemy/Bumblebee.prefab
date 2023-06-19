@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4886324326808335048}
   - component: {fileID: 7686922641762087098}
   - component: {fileID: 4886324326808335063}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bumblebee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115,7 +115,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4886324328137749224}
   - component: {fileID: 4886324328137749225}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,7 +165,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4886324328467328608}
   - component: {fileID: 4886324328467328609}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}

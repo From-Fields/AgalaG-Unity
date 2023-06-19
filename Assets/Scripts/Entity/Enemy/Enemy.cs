@@ -115,7 +115,7 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
     protected virtual void OnCollision(Collision2D other) {
         Entity entity = other.gameObject.GetComponentInChildren<Entity>();
 
-        Debug.Log("collision");
+        // Debug.Log("collision");
 
         if(entity != null) {
             entity.TakeDamage(this._collisionDamage);
