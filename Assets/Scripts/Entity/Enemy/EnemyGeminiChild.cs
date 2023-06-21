@@ -64,7 +64,6 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
         _currentHealth = Math.Clamp(_currentHealth - damage, 0, _maxHealth);
 
         if(_currentHealth == 0) {
-            this._wasKilled = true;
             Die();
         }
     }
@@ -78,6 +77,8 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
         this._wasKilled = false;
         this._currentHealth = this._maxHealth;
         this._collisionDamage = this._defaultCollisionDamage;
+
+        this.onDeath += (_) => this._wasKilled = true;
     }
     protected override void SubReserve() {
         if(_wasKilled)
