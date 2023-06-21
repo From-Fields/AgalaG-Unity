@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4677020357069483703}
   - component: {fileID: -9016797795062914641}
   m_Layer: 0
-  m_Name: Bullet_bumblebee1
+  m_Name: Bullet_bumblebee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

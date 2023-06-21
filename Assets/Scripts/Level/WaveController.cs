@@ -40,20 +40,23 @@ public class WaveController
     }
     private void TimeOutAllUnits()
     {
-        foreach (iWaveUnit unit in unitList)
+        int unitCount = unitList.Count;
+        for (int i = 0; i < unitCount; i++) {
+            iWaveUnit unit = unitList[i];
             unit.ExecuteTimeoutAction();
+        }
 
         CoroutineRunner.Instance.CallbackTimer(_timeout, EliminateAllUnits);
     }
     private void EliminateAllUnits()
     {
+        int unitCount = unitList.Count;
 
-        foreach (iWaveUnit unit in unitList)
-        {
+        for (int i = 0; i < unitCount; i++) {
             if(_isDone)
                 return;
 
-            unit?.Reserve();
+            unitList[i]?.Reserve();
         }
     }
 }

@@ -85,12 +85,14 @@ public class EnemyGemini : Enemy<EnemyGemini>
             float yOffset = (i < 1) ? -1 * this._geminiPositionOffset : this._geminiPositionOffset;
             Vector2 position = new Vector2(this.Position.x, this.Position.y + yOffset);
 
+            Debug.Log(position);
+
             child.Initialize(new Queue<iEnemyAction>(), null, new WaitSeconds(200), position);
             child.SetParent(this, _geminiPositionOffset, _orbitingVelocity);
             child.SetWeapon(_weaponCooldown, _geminiMissileDamage, _missileSpeed);
         }
     }
-    public override void Reserve() => Pool.Release(this);
+    protected override void ReserveToPool() => Pool.Release(this);
     protected override void SubReserve() {
         base.SubReserve();
 

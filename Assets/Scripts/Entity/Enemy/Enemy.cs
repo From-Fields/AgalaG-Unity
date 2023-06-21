@@ -76,14 +76,14 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
         if(actionQueue == null || timeoutAction == null)
             throw new ArgumentNullException("Action queue and Timeout action may not be null");
 
-        this.SubInitialize();
-
         this._actionQueue = actionQueue;
         this._startingAction = startingAction;
         this._timeoutAction = timeoutAction;
-        this.transform.position = startingPoint;
+        this.Rigidbody.position = startingPoint;
 
         this._droppedItem = drop;
+
+        this.SubInitialize();
 
         this.gameObject.SetActive(true);
 
@@ -92,27 +92,27 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
         else
             this.ExecuteNextAction();
     }
-    protected void OnReserve()
+    public void Reserve()
     {
-        this.onRelease?.Invoke();
-        
         this._actionQueue = null;
         this._startingAction = null;
         this._timeoutAction = null;
 
         this.onDeath = null;
-        this.onRelease = null;
         
         this._isDead = true;
         this.transform.position = Vector3.zero;
         this.Rigidbody.velocity = Vector3.zero;
         this.gameObject.SetActive(false);
         this.SubReserve();
+        this.ReserveToPool();
+
+        this.onRelease?.Invoke();
     }
 
     //Abstract Methods
     protected abstract void SubInitialize();
-    public abstract void Reserve();
+    protected abstract void ReserveToPool();
 
     //Virtual Methods
     protected virtual void SubReserve() { }
@@ -186,7 +186,7 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
     //iPoolableEntity
 	public abstract T OnCreate();
 	public abstract Action<T> onGetFromPool { get; }
-	public virtual Action<T> onReleaseToPool => (obj) => obj.OnReserve();
+	public virtual Action<T> onReleaseToPool { get; }
     public abstract IObjectPool<T> Pool { get; }
     #endregion
 }

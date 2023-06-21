@@ -126,7 +126,7 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
     public override EnemyGeminiChild OnCreate() => Instantiate<EnemyGeminiChild>(EntityPool<EnemyGeminiChild>.Instance.ObjReference);
     public override Action<EnemyGeminiChild> onGetFromPool => null;
     public override IObjectPool<EnemyGeminiChild> Pool => EntityPool<EnemyGeminiChild>.Instance.Pool;
-    public override void Reserve() => Pool.Release(this);
+    protected override void ReserveToPool() => Pool.Release(this);
     #endregion
 
     private void OnDrawGizmos() {

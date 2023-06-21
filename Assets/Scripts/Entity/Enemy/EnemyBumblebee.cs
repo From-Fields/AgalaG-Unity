@@ -74,7 +74,7 @@ public class EnemyBumblebee : Enemy<EnemyBumblebee>
     public override EnemyBumblebee OnCreate() => Instantiate<EnemyBumblebee>(EntityPool<EnemyBumblebee>.Instance.ObjReference);
     public override Action<EnemyBumblebee> onGetFromPool => null;
     public override IObjectPool<EnemyBumblebee> Pool => EntityPool<EnemyBumblebee>.Instance.Pool;
-    public override void Reserve() => Pool.Release(this);
+    protected override void ReserveToPool() => Pool.Release(this);
     #endregion
 
     private void OnDrawGizmos() {
