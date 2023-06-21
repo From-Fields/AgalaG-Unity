@@ -8,6 +8,7 @@ using UnityEngine.Pool;
 public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
 {
     //Attributes
+    private bool _wasKilled;
     private float _positionOffset;
     [SerializeField]
     private float _velocityMultiplier = 20;
@@ -62,8 +63,10 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
     public override void TakeDamage(int damage) {
         _currentHealth = Math.Clamp(_currentHealth - damage, 0, _maxHealth);
 
-        if(_currentHealth == 0)
+        if(_currentHealth == 0) {
+            this._wasKilled = true;
             Die();
+        }
     }
 
     //Enemy
@@ -72,11 +75,13 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
         this._currentAcceleration = _defaultAcceleration;
 
         this._isDead = false;
+        this._wasKilled = false;
         this._currentHealth = this._maxHealth;
         this._collisionDamage = this._defaultCollisionDamage;
     }
     protected override void SubReserve() {
-        this._parent.TakeDamage(1);
+        if(_wasKilled)
+            this._parent.TakeDamage(1);
     }
     protected override void SubUpdate() {
         Vector2 fromChild = (Position - _parent.Position).normalized;
