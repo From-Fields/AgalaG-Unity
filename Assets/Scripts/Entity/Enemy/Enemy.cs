@@ -80,6 +80,7 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
         this._startingAction = startingAction;
         this._timeoutAction = timeoutAction;
         this.Rigidbody.position = startingPoint;
+        this.transform.position = startingPoint;
 
         this._droppedItem = drop;
 
@@ -101,6 +102,7 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
         this.onDeath = null;
         
         this._isDead = true;
+        this.Rigidbody.position = Vector3.zero;
         this.transform.position = Vector3.zero;
         this.Rigidbody.velocity = Vector3.zero;
         this.gameObject.SetActive(false);
@@ -185,7 +187,7 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
 
     //iPoolableEntity
 	public abstract T OnCreate();
-	public abstract Action<T> onGetFromPool { get; }
+	public virtual Action<T> onGetFromPool { get; }
 	public virtual Action<T> onReleaseToPool { get; }
     public abstract IObjectPool<T> Pool { get; }
     #endregion

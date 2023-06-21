@@ -49,7 +49,6 @@ public class EnemyKamikaze: Enemy<EnemyKamikaze>
 
     //iPoolableEntity
     public override EnemyKamikaze OnCreate() => Instantiate<EnemyKamikaze>(EntityPool<EnemyKamikaze>.Instance.ObjReference);
-    public override Action<EnemyKamikaze> onGetFromPool => null;
     public override IObjectPool<EnemyKamikaze> Pool => EntityPool<EnemyKamikaze>.Instance.Pool;
 
     //Enemy

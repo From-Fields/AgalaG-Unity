@@ -68,7 +68,6 @@ public class EnemyGemini : Enemy<EnemyGemini>
     
     //iPoolableEntity
     public override EnemyGemini OnCreate() => Instantiate<EnemyGemini>(EntityPool<EnemyGemini>.Instance.ObjReference);
-    public override Action<EnemyGemini> onGetFromPool => null;
     public override IObjectPool<EnemyGemini> Pool => EntityPool<EnemyGemini>.Instance.Pool;
 
     protected override void SubInitialize() {
@@ -99,6 +98,7 @@ public class EnemyGemini : Enemy<EnemyGemini>
         int childCount = _children.Count;
 
         for (int i = 0; i < childCount; i++) {
+
             EnemyGeminiChild child = _children[i];
 
             if(!child.IsDead)

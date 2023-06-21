@@ -54,6 +54,9 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
         _desiredVelocity = Vector2.zero;
     }
     public override void Shoot() {
+        if(_isDead)
+            return;
+
         float currentOffset = Position.x - _parent.Position.x;
         // Debug.Log("Shoot!");
         
@@ -118,6 +121,8 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
 
         _desiredOrbit *= Time.fixedDeltaTime;
 
+        Debug.Log(_rigidbody.velocity);
+
         _rigidbody.velocity = Vector2.Lerp(_rigidbody.velocity, _desiredOrbit, Time.fixedDeltaTime * acceleration);
     }
 
@@ -125,7 +130,6 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
     
     //iPoolableEntity
     public override EnemyGeminiChild OnCreate() => Instantiate<EnemyGeminiChild>(EntityPool<EnemyGeminiChild>.Instance.ObjReference);
-    public override Action<EnemyGeminiChild> onGetFromPool => null;
     public override IObjectPool<EnemyGeminiChild> Pool => EntityPool<EnemyGeminiChild>.Instance.Pool;
     protected override void ReserveToPool() => Pool.Release(this);
     #endregion
