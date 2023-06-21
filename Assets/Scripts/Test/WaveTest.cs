@@ -39,7 +39,6 @@ public class WaveTest : MonoBehaviour
             }));
 
             wave.onWaveDone += CreateWave;
-
             wave.Initialize();
         }
 }

@@ -56,7 +56,7 @@ public class PrefabRepository : SingletonMonoBehaviour<PrefabRepository>
         if(t == typeof(ShieldPowerUp)) {
             return _shieldPowerUp;
         }
-        if(t == typeof(PickUp)) {
+        if(t == typeof(RepairPowerUp)) {
             return _repairPowerUp;
         }
 

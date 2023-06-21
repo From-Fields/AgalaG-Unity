@@ -23,6 +23,7 @@ public class PickUp : MonoBehaviour, iPoolableObject<PickUp>
         bool rotate = true, float rotationSpeed = 100f, 
         bool doScale = true, float maximumScale = 1.3f, float scaleSpeed = 5f
     ) {
+        gameObject.SetActive(true);
         this._powerUp = powerUp;
         transform.position = position;
         ApplyMovement(direction, speed);
@@ -66,8 +67,8 @@ public class PickUp : MonoBehaviour, iPoolableObject<PickUp>
 
         player.AddPowerUp(_powerUp);
 
-        gameObject.SetActive(false);
         Pool.Release(this);
+        gameObject.SetActive(false);
     }
 
     private void OnValidate() {
