@@ -80,7 +80,7 @@ public class Player : MonoBehaviour, Entity
 
         Debug.Log(_damage);
 
-            this._currentHealth = Math.Clamp(_currentHealth - _damage, 0, _maxHealth);
+            this._currentHealth = Mathf.Clamp(_currentHealth - _damage, 0, _maxHealth);
 
         if(this._currentHealth <= 0)
             this.Die();
