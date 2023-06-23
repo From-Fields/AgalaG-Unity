@@ -9,15 +9,24 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
     //Attributes
     public int score;
 
+    //Damage
+    [Header("Damage")][SerializeField]
+    protected int _defaultCollisionDamage = 1;
+    protected int _collisionDamage;
+
     //Speed
-    [SerializeField]
+    [Header("Movement")][SerializeField]
     protected float _defaultSpeed = 100;
-    protected float _currentSpeed;    
+    protected float _currentSpeed;
 
     //Acceleration
     [SerializeField]
     public float _defaultAcceleration = 10;
     public float _currentAcceleration;
+
+    //Drops
+    [SerializeField]
+    private PowerUp _droppedItem = null;
 
     protected bool _isDead;
 
@@ -62,17 +71,20 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
         if(_currentAction == null)
             Reserve();
     }
-    public void Initialize(Queue<iEnemyAction> actionQueue, iEnemyAction startingAction, iEnemyAction timeoutAction, Vector2 startingPoint)
+    public void Initialize(Queue<iEnemyAction> actionQueue, iEnemyAction startingAction, iEnemyAction timeoutAction, Vector2 startingPoint, PowerUp drop = null)
     {
         if(actionQueue == null || timeoutAction == null)
             throw new ArgumentNullException("Action queue and Timeout action may not be null");
 
-        this.SubInitialize();
-
         this._actionQueue = actionQueue;
         this._startingAction = startingAction;
         this._timeoutAction = timeoutAction;
+        this.Rigidbody.position = startingPoint;
         this.transform.position = startingPoint;
+
+        this._droppedItem = drop;
+
+        this.SubInitialize();
 
         this.gameObject.SetActive(true);
 
@@ -81,26 +93,43 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
         else
             this.ExecuteNextAction();
     }
-    protected void OnReserve()
+    public void Reserve()
     {
-        this.onRelease?.Invoke();
-        
         this._actionQueue = null;
         this._startingAction = null;
         this._timeoutAction = null;
 
         this.onDeath = null;
-        this.onRelease = null;
         
         this._isDead = true;
+        this.Rigidbody.position = Vector3.zero;
         this.transform.position = Vector3.zero;
         this.Rigidbody.velocity = Vector3.zero;
         this.gameObject.SetActive(false);
+        this.SubReserve();
+        this.ReserveToPool();
+
+        this.onRelease?.Invoke();
     }
 
     //Abstract Methods
     protected abstract void SubInitialize();
-    public abstract void Reserve();
+    protected abstract void ReserveToPool();
+
+    //Virtual Methods
+    protected virtual void SubReserve() { }
+    protected virtual void SubUpdate() { }
+    protected virtual void SubFixedUpdate() { }
+    protected virtual void OnCollision(Collision2D other) {
+        Entity entity = other.gameObject.GetComponentInChildren<Entity>();
+
+        // Debug.Log("collision");
+
+        if(entity != null) {
+            entity.TakeDamage(this._collisionDamage);
+            this.Die();
+        }
+    }
 
     //Unity Hooks
     public void Update()
@@ -112,7 +141,7 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
             ExecuteNextAction();
 
         _currentAction?.Update(this);
-
+        SubUpdate();
     }
     public void FixedUpdate()
     {
@@ -121,6 +150,13 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
         
         if(!_currentAction.CheckCondition(this))
             _currentAction.FixedUpdate(this);
+        SubFixedUpdate();
+    }
+    public void OnCollisionEnter2D(Collision2D other)  {
+        if(_isDead)
+            return;
+
+        OnCollision(other);
     }
 
     #region Interface Implementation
@@ -130,11 +166,18 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
     public abstract Vector2 Position { get; }
 
     public abstract void Move(Vector2 direction, float speed, float acceleration);
+    public abstract void Stop();
     public abstract void Shoot();
     public abstract void TakeDamage(int damage);
     public void Die()
     {
         onDeath?.Invoke(this.score);
+        
+        if(_droppedItem != null) {
+            Vector2 randomDirection = new Vector2(UnityEngine.Random.Range(-0.9f, 0.9f), UnityEngine.Random.Range(-0.9f, 0.9f)).normalized;
+            SingletonObjectPool<PickUp>.Instance.Pool.Get().Initialize(_droppedItem, Rigidbody.transform.position, randomDirection);
+        }
+
         Reserve();
     }
 
@@ -144,8 +187,8 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
 
     //iPoolableEntity
 	public abstract T OnCreate();
-	public abstract Action<T> onGetFromPool { get; }
-	public virtual Action<T> onReleaseToPool => (obj) => obj.OnReserve();
+	public virtual Action<T> onGetFromPool { get; }
+	public virtual Action<T> onReleaseToPool { get; }
     public abstract IObjectPool<T> Pool { get; }
     #endregion
 }

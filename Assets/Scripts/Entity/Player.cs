@@ -24,25 +24,35 @@ public class Player : MonoBehaviour, Entity
     public float currentAcceleration;
     [SerializeField] [Range(0, 100)]
     private float _defaultAcceleration = 10;
-    public List<PowerUp> powerUps;
+    public List<iPowerUp> powerUps = new List<iPowerUp>();
+
+    public System.Action onDeath;
 
     // References
     private InputHandler _inputHandler => InputHandler.Instance;
     private Rigidbody2D _rigidbody;
 
     // Input Variables
-    private Vector2 _movement = Vector2.zero; 
+    private Vector2 _movement = Vector2.zero;
+    
+    // Properties
+    public int MaxHealth => _maxHealth;
 
     // Methods
     public void SwitchWeapon(Weapon newWeapon) => this.currentWeapon = newWeapon;
     public void SwitchToDefaultWeapon() => SwitchWeapon(_defaultWeapon);
 
-    public void AddPowerUp(PowerUp newPowerUp) {
+    public void AddPowerUp(iPowerUp newPowerUp) {
+        newPowerUp.OnPickup(this);
+
+        if(newPowerUp.IsInstant)
+            return;
+
         if(!this.powerUps.Contains(newPowerUp)) {
             this.powerUps.Add(newPowerUp);
         }
     }
-    public void RemovePowerUp(PowerUp powerUp) {
+    public void RemovePowerUp(iPowerUp powerUp) {
         this.powerUps.Remove(powerUp);
     }
     public void Heal(int amount) => this._currentHealth = Mathf.Clamp(_currentHealth + amount, 0, _maxHealth);
@@ -59,15 +69,33 @@ public class Player : MonoBehaviour, Entity
 
         _rigidbody.velocity = Vector2.Lerp(_rigidbody.velocity, destination, Time.fixedDeltaTime * acceleration);
     }
+    public void Stop() => _rigidbody.velocity = Vector2.zero;
     public void Shoot() => currentWeapon.Shoot();
     public void TakeDamage(int damage) {
-        this._currentHealth -= damage;
+        int _damage = damage;
+
+        for (int i = 0; i < powerUps.Count; i++) {
+            _damage = powerUps[i].OnTakeDamage(_damage, _currentHealth); 
+        }
+
+        Debug.Log(_damage);
+
+            this._currentHealth = Mathf.Clamp(_currentHealth - _damage, 0, _maxHealth);
 
         if(this._currentHealth <= 0)
             this.Die();
     }
     public void Die() {
+        bool die = true;    
+
+        foreach(PowerUp powerUp in powerUps)
+            die = powerUp.OnDeath();
+
+        if(!die)
+            return;
+
         gameObject.SetActive(false);
+        this.onDeath?.Invoke();
         this.isDead = true;
     }
 
@@ -83,6 +111,9 @@ public class Player : MonoBehaviour, Entity
     private void Update() {
         if(isDead) 
             return;
+
+        foreach(PowerUp powerUp in powerUps)
+            powerUp.OnTick();
 
         _movement = (_inputHandler.HasMovement) ? _inputHandler.Movement : Vector2.zero;
         if(_inputHandler.Shoot)
