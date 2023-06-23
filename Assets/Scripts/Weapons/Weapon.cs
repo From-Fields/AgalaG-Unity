@@ -10,6 +10,7 @@ public abstract class Weapon : MonoBehaviour
     [SerializeField] protected Transform[] spawnPoint = new Transform[1];
     [SerializeField] protected int _maxAmmunition = 1;
     [SerializeField] [Min(0.01f)] protected float _speed = 2f;
+    [SerializeField] [Min(0.01f)] protected float _cooldown = 0.1f;
     protected int _currentAmmuntion;
 
     protected string _shooter;

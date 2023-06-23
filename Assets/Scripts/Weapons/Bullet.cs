@@ -46,16 +46,17 @@ public class Bullet : MonoBehaviour
     /// <param name="speed"></param>
     /// <param name="shooter"></param>
     /// <param name="sprite"></param>
-    public void Initialize(Vector2 direction, float speed, string shooter, Sprite sprite = null) {
+    public void Initialize(Vector2 direction, float speed, string shooter, int damage = -1, Sprite sprite = null) {
         _direction = direction;
         _speed = speed;
         _shooter = shooter;
         _sprite = sprite ?? _sprite;
-        _spriteRenderer.sprite = _sprite;
+        if(_spriteRenderer != null && _spriteRenderer.sprite == null)
+            _spriteRenderer.sprite = _sprite;
+        _damage = (damage > 0) ? damage : _damage;
 
         gameObject.SetActive(true);
     }
-
     private void DestroySelf()
     {
         Destroy(gameObject);

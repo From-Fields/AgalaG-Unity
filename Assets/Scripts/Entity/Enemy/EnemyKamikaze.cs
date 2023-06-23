@@ -8,13 +8,8 @@ using UnityEngine.Pool;
 public class EnemyKamikaze: Enemy<EnemyKamikaze>
 {
     //Attributes
-    //Damage
-    [SerializeField]
-    private int _defaultKamikazeDamage = 1;
-    private int _kamikazeDamage;
-
     //Health
-    [SerializeField]
+    [Header("Health")][SerializeField]
     private int _defaultHealth = 1;
     private int _currentHealth;
     private int _maxHealth;
@@ -32,31 +27,17 @@ public class EnemyKamikaze: Enemy<EnemyKamikaze>
     {
         _rigidbody = GetComponent<Rigidbody2D>();
     }
-    private void Start() { }
-    private void OnCollisionEnter2D(Collision2D other) 
-    {
-        if(_isDead)
-            return;
-
-        Entity entity = other.gameObject.GetComponentInChildren<Entity>();
-
-        // Debug.Log("collision");
-
-        if(entity != null)
-        {
-            entity.TakeDamage(this._kamikazeDamage);
-            this.Die();
-        }    
-    }
 
     #region InterfaceImplementation
     //iEntity
-    public override int health => 0;
+    public override int health => _currentHealth;
     public override Vector2 CurrentVelocity => _rigidbody.velocity;
     public override Vector2 Position => _rigidbody.position;
 
     public override void Move(Vector2 direction, float speed, float acceleration) =>
         _rigidbody.velocity = Vector2.Lerp(_rigidbody.velocity, direction * speed * Time.fixedDeltaTime, Time.fixedDeltaTime * acceleration);
+    public override void Stop() =>
+        _rigidbody.velocity = Vector2.Lerp(_rigidbody.velocity, Vector2.zero, 0.99f);
     public override void Shoot() { }
     public override void TakeDamage(int damage)
     {
@@ -68,7 +49,6 @@ public class EnemyKamikaze: Enemy<EnemyKamikaze>
 
     //iPoolableEntity
     public override EnemyKamikaze OnCreate() => Instantiate<EnemyKamikaze>(EntityPool<EnemyKamikaze>.Instance.ObjReference);
-    public override Action<EnemyKamikaze> onGetFromPool => null;
     public override IObjectPool<EnemyKamikaze> Pool => EntityPool<EnemyKamikaze>.Instance.Pool;
 
     //Enemy
@@ -77,11 +57,10 @@ public class EnemyKamikaze: Enemy<EnemyKamikaze>
         this._currentSpeed = _defaultSpeed;
         this._currentAcceleration = _defaultAcceleration;
 
-        _isDead = false;
-        _kamikazeDamage = _defaultKamikazeDamage;
-        _maxHealth = _defaultHealth;
-        _currentHealth = _defaultHealth;
+        this._isDead = false;
+        this._maxHealth = this._defaultHealth;
+        this._currentHealth = this._defaultHealth;
     }
-    public override void Reserve() => Pool.Release(this);
+    protected override void ReserveToPool() => Pool.Release(this);
     #endregion    
 }
