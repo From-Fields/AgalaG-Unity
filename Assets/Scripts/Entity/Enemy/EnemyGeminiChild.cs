@@ -121,7 +121,7 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
 
         _desiredOrbit *= Time.fixedDeltaTime;
 
-        Debug.Log(_rigidbody.velocity);
+        //Debug.Log(_rigidbody.velocity);
 
         _rigidbody.velocity = Vector2.Lerp(_rigidbody.velocity, _desiredOrbit, Time.fixedDeltaTime * acceleration);
     }

@@ -10,6 +10,11 @@ public class CoroutineRunner : SingletonMonoBehaviour<CoroutineRunner>
         return StartCoroutine(SetTimer(timeout, callback));
     }
 
+    public void CancelCallback(Coroutine coroutine)
+    {
+        StopCoroutine(coroutine);
+    }
+
     private IEnumerator SetTimer(float timeout, Action callback = null)
     {
         yield return new WaitForSeconds(timeout);

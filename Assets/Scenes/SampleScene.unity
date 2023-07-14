@@ -430,7 +430,7 @@ GameObject:
   - component: {fileID: 759839578}
   - component: {fileID: 759839582}
   m_Layer: 0
-  m_Name: player
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -455,6 +455,9 @@ MonoBehaviour:
   _defaultSpeed: 5
   currentAcceleration: 0
   _defaultAcceleration: 5
+  testWeapons:
+  - {fileID: 2139966044082484797, guid: 22d5c1ecd59c58c418b31aebb7965a14, type: 3}
+  - {fileID: 6917446802304867943, guid: fb409fa508b99dd43a234e930b54826a, type: 3}
 --- !u!4 &759839579
 Transform:
   m_ObjectHideFlags: 0
@@ -536,7 +539,7 @@ MonoBehaviour:
   - {fileID: 1242854621}
   _maxAmmunition: 999
   _speed: 5
-  _cooldown: 0.1
+  _cooldown: 0.3
   _damage: 0
   _layer: -1
 --- !u!1 &762864519

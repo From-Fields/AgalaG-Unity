@@ -5,21 +5,17 @@ using UnityEngine;
 [System.Serializable]
 public class DefaultWeapon : Weapon
 {
-    private bool _canShoot = true;
     private Vector2 _direction = Vector2.up;
-    
-    [SerializeField]
-    private int _damage;
-    [SerializeField]
-    private int _layer = -1;
 
     protected override void Initialize() {
         _shooter = gameObject.tag;
-        _canShoot = true;
     }
 
-    // A arma padr�o n�o ter� limite de tiros, ent�o n�o far� nada em isEmpty
-    public override void isEmpty() { }
+    // A arma padrao nao tera limite de tiros, entao nao fara nada em isEmpty
+    public override bool isEmpty() 
+    {
+        return false;
+    }
 
     public override void Shoot()
     {
@@ -32,15 +28,6 @@ public class DefaultWeapon : Weapon
         bullet.gameObject.layer = (_layer != -1) ? _layer : gameObject.layer;
         bullet.Initialize(_direction, _speed, _shooter, damage: _damage);
     }
-
-    private void StartCooldown()  {
-        if(_cooldown <= 0)
-            return;
-
-        _canShoot = false;
-        CoroutineRunner.Instance.CallbackTimer(this._cooldown, OnCooldownEnd);
-    }
-    private void OnCooldownEnd() => _canShoot = true;
 
     public void SetAttributes(Vector2? direction = null, int maxAmmunition = -1, float speed = -1, float cooldown = -1, int damage = -1, int layer = -1) {
         this._direction = direction.HasValue ? direction.Value : Vector2.up;

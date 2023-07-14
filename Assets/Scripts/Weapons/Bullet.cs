@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Bullet : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class Bullet : MonoBehaviour
     [SerializeField][Min(1)] private int _damage = 1;
     [SerializeField][Min(.01f)] private float _timeToDestroySelf = 1f;
     private float _counter = 0f;
+
+    [SerializeField] private GameObject _explosion;
+    private bool shouldExplode = false;
 
     void Awake() {
         _sprite = Resources.Load<Sprite>("Sprites/Bullet_Player");
@@ -46,7 +50,9 @@ public class Bullet : MonoBehaviour
     /// <param name="speed"></param>
     /// <param name="shooter"></param>
     /// <param name="sprite"></param>
-    public void Initialize(Vector2 direction, float speed, string shooter, int damage = -1, Sprite sprite = null) {
+    public void Initialize(Vector2 direction, float speed, string shooter, int damage = -1, Sprite sprite = null, 
+        bool explosion = false) 
+    {
         _direction = direction;
         _speed = speed;
         _shooter = shooter;
@@ -54,11 +60,23 @@ public class Bullet : MonoBehaviour
         if(_spriteRenderer != null && _spriteRenderer.sprite == null)
             _spriteRenderer.sprite = _sprite;
         _damage = (damage > 0) ? damage : _damage;
+        shouldExplode = explosion;
 
         gameObject.SetActive(true);
     }
+
+    private void CreateExplosion()
+    {
+        Instantiate(_explosion, transform.position, Quaternion.identity);
+    }
+
     private void DestroySelf()
     {
+        if (shouldExplode)
+        {
+            CreateExplosion();
+        }
+
         Destroy(gameObject);
     }
 

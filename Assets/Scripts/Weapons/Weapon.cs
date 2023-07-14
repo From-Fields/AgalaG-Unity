@@ -13,16 +13,37 @@ public abstract class Weapon : MonoBehaviour
     [SerializeField] [Min(0.01f)] protected float _cooldown = 0.1f;
     protected int _currentAmmuntion;
 
+    [Space]
+    [SerializeField][Min(1)] protected int _damage = 1;
+    [SerializeField] protected int _layer = -1;
+
     protected string _shooter;
+    protected bool _canShoot = true;
 
     public int MaxAmmunition => _maxAmmunition;
     public int CurrentAmmunition => _currentAmmuntion;
 
     void Awake() {
         Initialize();
+        _currentAmmuntion = _maxAmmunition;
+        _canShoot = true;
     }
 
+
+    protected Coroutine StartCooldown()
+    {
+        if (_cooldown <= 0)
+            return null;
+
+        _canShoot = false;
+        return CoroutineRunner.Instance.CallbackTimer(this._cooldown, OnCooldownEnd);
+    }
+
+    protected void OnCooldownEnd() => _canShoot = true;
+
+    public virtual void DisposeWeapon() { }
+
     protected abstract void Initialize();
-    public abstract void isEmpty();
+    public abstract bool isEmpty();
     public abstract void Shoot();
 }
