@@ -146,7 +146,7 @@ MonoBehaviour:
   - {fileID: 2139966043296429408}
   - {fileID: 2139966043231053832}
   _maxAmmunition: 100
-  _speed: 5
-  _cooldown: 0.15
+  _speed: 7
+  _cooldown: 0.1
   _damage: 1
   _layer: -1

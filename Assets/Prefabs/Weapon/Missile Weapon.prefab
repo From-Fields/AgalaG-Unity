@@ -79,9 +79,9 @@ MonoBehaviour:
   bulletPrefab: {fileID: 2929678585915850339, guid: bc39054b592edf1498d9f9664dce628b, type: 3}
   spawnPoint:
   - {fileID: 468864973438110159}
-  _maxAmmunition: 10
+  _maxAmmunition: 15
   _speed: 2
-  _cooldown: 0.6
+  _cooldown: 0.8
   _damage: 2
   _layer: -1
   explosion: {fileID: 2461032222662122469, guid: 84b0e8a27ceeb9e4a89eca3846a74ef9, type: 3}
