@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Player : MonoBehaviour, Entity
 {
@@ -24,9 +25,14 @@ public class Player : MonoBehaviour, Entity
     public float currentAcceleration;
     [SerializeField] [Range(0, 100)]
     private float _defaultAcceleration = 10;
+
+#if UNITY_EDITOR
+    public GameObject[] testWeapons;
+#endif
+
     public List<iPowerUp> powerUps = new List<iPowerUp>();
 
-    public System.Action onDeath;
+    public UnityAction onDeath;
 
     // References
     private InputHandler _inputHandler => InputHandler.Instance;
@@ -39,7 +45,12 @@ public class Player : MonoBehaviour, Entity
     public int MaxHealth => _maxHealth;
 
     // Methods
-    public void SwitchWeapon(Weapon newWeapon) => this.currentWeapon = newWeapon;
+    public void SwitchWeapon(Weapon newWeapon)
+    {
+        this.currentWeapon = newWeapon;
+        this.currentWeapon.DisposeWeapon();
+    }
+
     public void SwitchToDefaultWeapon() => SwitchWeapon(_defaultWeapon);
 
     public void AddPowerUp(iPowerUp newPowerUp) {
@@ -70,7 +81,16 @@ public class Player : MonoBehaviour, Entity
         _rigidbody.velocity = Vector2.Lerp(_rigidbody.velocity, destination, Time.fixedDeltaTime * acceleration);
     }
     public void Stop() => _rigidbody.velocity = Vector2.zero;
-    public void Shoot() => currentWeapon.Shoot();
+
+    public void Shoot()
+    {
+        currentWeapon.Shoot();
+        if (currentWeapon.isEmpty())
+        {
+            SwitchToDefaultWeapon();
+        }
+    }
+
     public void TakeDamage(int damage) {
         int _damage = damage;
 
@@ -114,6 +134,19 @@ public class Player : MonoBehaviour, Entity
 
         foreach(PowerUp powerUp in powerUps)
             powerUp.OnTick();
+
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            Weapon tw = Instantiate(testWeapons[0], gameObject.transform).GetComponent<Weapon>();
+            SwitchWeapon(tw);
+        }
+        else if (Input.GetKeyDown(KeyCode.F3))
+        {
+            Weapon tw = Instantiate(testWeapons[1], gameObject.transform).GetComponent<Weapon>();
+            SwitchWeapon(tw);
+        }
+#endif
 
         _movement = (_inputHandler.HasMovement) ? _inputHandler.Movement : Vector2.zero;
         if(_inputHandler.Shoot)

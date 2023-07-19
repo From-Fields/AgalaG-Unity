@@ -18,7 +18,7 @@ public class InputHandler: SingletonMonoBehaviour<InputHandler>
         return inputScheme.PlayerActions.Pause;
     }
 
-    public bool Shoot => GetShoot().triggered;
+    public bool Shoot => GetShoot().inProgress;
     private InputAction GetShoot() {
         return inputScheme.PlayerActions.Shoot;
     }
