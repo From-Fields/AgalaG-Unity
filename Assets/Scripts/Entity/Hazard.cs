@@ -19,7 +19,7 @@ public class Hazard: MonoBehaviour, Entity, iPoolableEntity<Hazard>
     public void Initialize(
         Vector2 position, Vector2 direction, Sprite sprite = null,
         float speed = 5, uint damage = 1, uint health = 1,
-        bool rotate = true, float rotationSpeed = 100f,  Vector2? scale = null,
+        bool rotate = true, float rotationSpeed = 100,  Vector2? scale = null,
         uint maxBounces = 0
     ) {
         transform.position = position;
@@ -30,7 +30,7 @@ public class Hazard: MonoBehaviour, Entity, iPoolableEntity<Hazard>
         this._maxBounces = maxBounces;
         this._currentBounces = 0;
         
-        this._visuals.Initialize(sprite ?? _sprite, rotate, rotationSpeed, false, baseScale: scale);
+        this._visuals.Initialize(sprite ?? _sprite, rotate, rotationSpeed, baseScale: scale);
 
         this._damage = damage;
         this._health = health;

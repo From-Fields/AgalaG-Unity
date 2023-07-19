@@ -15,7 +15,7 @@ public class WaveHazard: iWaveUnit
 
     public WaveHazard(
         Hazard hazard, Vector2 position, Vector2 direction, Sprite sprite = null,
-        bool rotate = true, float speed = 5, float rotationSpeed = 1, 
+        bool rotate = true, float speed = 5, float rotationSpeed = 100, 
         uint damage = 1, uint health = 1, uint maxBounces = 0, bool waitForTimeout = false,
         Vector2? scale = null, Action<iWaveUnit> onUnitReleased = null)
     {
