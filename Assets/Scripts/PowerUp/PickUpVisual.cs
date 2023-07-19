@@ -20,7 +20,7 @@ public class PickUpVisual : MonoBehaviour
     // Local Variables
     private bool _scaleUp = true;
 
-    internal void Initialize(Sprite sprite, bool rotate, float rotationSpeed, bool doScale, float maximumScale, float scaleSpeed) {
+    internal void Initialize(Sprite sprite, bool rotate, float rotationSpeed, bool doScale, float maximumScale = 1, float scaleSpeed = 0, Vector2? baseScale = null) {
         gameObject.SetActive(true);
 
         this._renderer.sprite = sprite;
@@ -30,6 +30,8 @@ public class PickUpVisual : MonoBehaviour
         this._rotationSpeed = rotationSpeed;
         this._maximumScale = maximumScale;
         this._scaleSpeed = scaleSpeed;
+
+        transform.localScale = (baseScale.HasValue) ? baseScale.Value : Vector2.one;
     }
 
     private void DoScale() {

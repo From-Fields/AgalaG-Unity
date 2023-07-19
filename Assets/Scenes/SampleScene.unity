@@ -643,6 +643,7 @@ MonoBehaviour:
   _repairPowerUp: {fileID: 21300000, guid: 3e78ffcfc69fc6b4b9076d2acd39ba64, type: 3}
   _multishotPowerUp: {fileID: 21300000, guid: 4043bd8172526d2479f29287e2bd5199, type: 3}
   _missilePowerUp: {fileID: 21300000, guid: bd0b4747d39c7c84c9f8c57bc11b4eea, type: 3}
+  _hazardPrefab: {fileID: 2901519335932118994, guid: d50b7422faf044442a3cfb965263da7a, type: 3}
 --- !u!4 &1528889790
 Transform:
   m_ObjectHideFlags: 0

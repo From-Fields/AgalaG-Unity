@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class WaveController
 {
@@ -58,5 +57,9 @@ public class WaveController
 
             unitList[i]?.Reserve();
         }
+        if(_isDone)
+            return;
+
+        onWaveDone?.Invoke();
     }
 }
