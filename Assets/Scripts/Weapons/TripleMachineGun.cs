@@ -8,9 +8,10 @@ public class TripleMachineGun : Weapon
 
     private Coroutine _reloadCoroutine = null;
 
-    protected override void Initialize()
+    public override void Initialize(LayerMask layer)
     {
         _shooter = transform.parent.tag;
+        _layer = layer;
     }
 
     public override void Shoot()

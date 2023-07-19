@@ -7,8 +7,9 @@ public class DefaultWeapon : Weapon
 {
     private Vector2 _direction = Vector2.up;
 
-    protected override void Initialize() {
+    public override void Initialize(LayerMask layer) {
         _shooter = gameObject.tag;
+        _layer = layer;
     }
 
     // A arma padrao nao tera limite de tiros, entao nao fara nada em isEmpty

@@ -47,8 +47,11 @@ public class Player : MonoBehaviour, Entity
     // Methods
     public void SwitchWeapon(Weapon newWeapon)
     {
-        this.currentWeapon = newWeapon;
         this.currentWeapon.DisposeWeapon();
+        this.currentWeapon = newWeapon;
+        newWeapon.transform.parent = transform;
+        newWeapon.transform.position = transform.position;
+        newWeapon.Initialize(LayerMask.NameToLayer("PlayerBullets"));
     }
 
     public void SwitchToDefaultWeapon() => SwitchWeapon(_defaultWeapon);
@@ -127,6 +130,7 @@ public class Player : MonoBehaviour, Entity
         currentAcceleration = _defaultAcceleration;
         currentWeapon = _defaultWeapon;
         _currentHealth = _maxHealth;
+        SwitchToDefaultWeapon();
     }
     private void Update() {
         if(isDead) 

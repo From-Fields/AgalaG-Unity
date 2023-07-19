@@ -11,9 +11,10 @@ public class Missile : Weapon
 
     private Coroutine _reloadCoroutine = null;
 
-    protected override void Initialize()
+    public override void Initialize(LayerMask layer)
     {
         _shooter = transform.parent.gameObject.tag;
+        _layer = layer;
     }
 
     public override void Shoot()

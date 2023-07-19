@@ -24,7 +24,6 @@ public abstract class Weapon : MonoBehaviour
     public int CurrentAmmunition => _currentAmmuntion;
 
     void Awake() {
-        Initialize();
         _currentAmmuntion = _maxAmmunition;
         _canShoot = true;
     }
@@ -43,7 +42,7 @@ public abstract class Weapon : MonoBehaviour
 
     public virtual void DisposeWeapon() { }
 
-    protected abstract void Initialize();
+    public abstract void Initialize(LayerMask layer);
     public abstract bool isEmpty();
     public abstract void Shoot();
 }

@@ -636,9 +636,13 @@ MonoBehaviour:
   _geminiPrefab: {fileID: 4162257234678357608, guid: 359c2f20be12abb4d84b86fb71fb869d, type: 3}
   _geminiChildPrefab: {fileID: 6106984641422381583, guid: f0b8b3d439cc1d243ad6d829011703b5, type: 3}
   _defaultWeaponPrefab: {fileID: 0}
+  _missileWeaponPrefab: {fileID: 6917446802304867937, guid: fb409fa508b99dd43a234e930b54826a, type: 3}
+  _multishotWeaponPrefab: {fileID: 2139966044082484799, guid: 22d5c1ecd59c58c418b31aebb7965a14, type: 3}
   _pickupPrefab: {fileID: 1969855797167298179, guid: 5f1b43da46e219346a0778ea340f47a5, type: 3}
-  _shieldPowerUp: {fileID: 21300000, guid: 93761cb23b331a0459e14924a19ab9dd, type: 3}
+  _shieldPowerUp: {fileID: 21300000, guid: 8aac4d623da69674da5408cc55eb9eb3, type: 3}
   _repairPowerUp: {fileID: 21300000, guid: 3e78ffcfc69fc6b4b9076d2acd39ba64, type: 3}
+  _multishotPowerUp: {fileID: 21300000, guid: 4043bd8172526d2479f29287e2bd5199, type: 3}
+  _missilePowerUp: {fileID: 21300000, guid: bd0b4747d39c7c84c9f8c57bc11b4eea, type: 3}
 --- !u!4 &1528889790
 Transform:
   m_ObjectHideFlags: 0

@@ -25,7 +25,7 @@ public class WaveTest : MonoBehaviour
                     new Queue<iEnemyAction>(new [] {
                         new MoveAndShoot(new Vector2(2, 0), 1.5f, 1, 0.8f)
                     }),
-                    drop: new ShieldPowerUp()
+                    drop: new TripleMachineGunPowerUp()
                 ),
                 new WaveUnit<EnemyGemini>(
                     new Vector2(-5, 6),
