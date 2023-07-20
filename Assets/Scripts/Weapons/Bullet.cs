@@ -21,16 +21,14 @@ public class Bullet : MonoBehaviour
     void Awake() {
         _sprite = Resources.Load<Sprite>("Sprites/Bullet_Player");
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!collision.gameObject.CompareTag(_shooter))
-        {
-            Entity entity = collision?.gameObject.GetComponent<Entity>();
-            entity?.TakeDamage(_damage);
-            DestroySelf();
-        }
+        Entity entity = collision?.gameObject.GetComponent<Entity>();
+        entity?.TakeDamage(_damage);
+        DestroySelf();
     }
 
     void Update() {
@@ -67,7 +65,7 @@ public class Bullet : MonoBehaviour
 
     private void CreateExplosion()
     {
-        Instantiate(_explosion, transform.position, Quaternion.identity);
+        Instantiate(_explosion, transform.position, Quaternion.identity).gameObject.layer = gameObject.layer;
     }
 
     private void DestroySelf()

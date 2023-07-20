@@ -18,6 +18,8 @@ public class PickUp : MonoBehaviour, iPoolableObject<PickUp>
     private Rigidbody2D _rigidbody;
     private PickUpVisual _visuals;
 
+    private AudioManager _audioManager;
+
     public void Initialize(
         PowerUp powerUp, Vector2 position, Vector2 direction, float speed = 5, 
         bool rotate = true, float rotationSpeed = 100f, 
@@ -39,6 +41,7 @@ public class PickUp : MonoBehaviour, iPoolableObject<PickUp>
         normal.Normalize();
 
         Vector2 targetVelocity = velocity - 2 * (Vector2.Dot(velocity, normal) * normal);
+        _audioManager.PlaySound(EntityAudioType.Bounce);
 
         _rigidbody.velocity = targetVelocity;
     }
@@ -49,6 +52,7 @@ public class PickUp : MonoBehaviour, iPoolableObject<PickUp>
         _collider = gameObject.GetComponent<Collider2D>();
         _rigidbody = gameObject.GetComponent<Rigidbody2D>();
         _visuals = GetComponentInChildren<PickUpVisual>();
+        _audioManager = GetComponentInChildren<AudioManager>();
 
         #if UNITY_EDITOR
             if(debug) {

@@ -13,6 +13,7 @@ public class Hazard: MonoBehaviour, Entity, iPoolableEntity<Hazard>
     private Vector2 _initialDirection = Vector2.zero;
     private Collider2D _collider;
     private Rigidbody2D _rigidbody;
+    private AudioManager _audioManager;
 
     private PickUpVisual _visuals;
 
@@ -49,6 +50,7 @@ public class Hazard: MonoBehaviour, Entity, iPoolableEntity<Hazard>
         normal.Normalize();
 
         Vector2 targetVelocity = velocity - 2 * (Vector2.Dot(velocity, normal) * normal);
+        _audioManager.PlaySound(EntityAudioType.Bounce);
 
         _rigidbody.velocity = targetVelocity;
         this._currentBounces++;
@@ -60,6 +62,7 @@ public class Hazard: MonoBehaviour, Entity, iPoolableEntity<Hazard>
         _collider = gameObject.GetComponent<Collider2D>();
         _rigidbody = gameObject.GetComponent<Rigidbody2D>();
         _visuals = GetComponentInChildren<PickUpVisual>();
+        _audioManager = GetComponentInChildren<AudioManager>();
     }
     private void OnTriggerEnter2D(Collider2D collision) {
         Player player = collision.gameObject.GetComponent<Player>();
@@ -125,5 +128,8 @@ public class Hazard: MonoBehaviour, Entity, iPoolableEntity<Hazard>
         if(_health <= 0)
             Die();
     }
-    public void Die() => ReserveToPool();
+    public void Die() {
+        _audioManager.PlaySound(EntityAudioType.Bounce);
+        ReserveToPool();
+    }
 }

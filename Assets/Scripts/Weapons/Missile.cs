@@ -28,9 +28,10 @@ public class Missile : Weapon
         bullet.gameObject.layer = (_layer != -1) ? _layer : gameObject.layer;
         bullet.Initialize(_direction, _speed, _shooter, damage: _damage, explosion: true);
         _currentAmmuntion--;
+        onShoot?.Invoke();
     }
 
-    public override void DisposeWeapon()
+    protected override void SubDisposeWeapon()
     {
         CoroutineRunner.Instance.CancelCallback(_reloadCoroutine);
         Destroy(gameObject);

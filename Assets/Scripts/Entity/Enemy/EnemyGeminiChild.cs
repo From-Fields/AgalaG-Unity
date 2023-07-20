@@ -33,7 +33,9 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
     }
     public void SetWeapon(float weaponCooldown, int missileDamage, float missileSpeed) {
         this._weapon.SetAttributes(damage: missileDamage, cooldown: weaponCooldown, speed: missileSpeed, direction: Vector2.down);
+        this._weapon.onShoot += PlayShotSound;
     }
+    private void PlayShotSound() => _audioManager.PlaySound(EntityAudioType.Shot);
 
     //Unity Hooks
     private void Awake() {

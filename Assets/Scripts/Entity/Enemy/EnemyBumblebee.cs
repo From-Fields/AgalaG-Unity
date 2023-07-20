@@ -29,7 +29,9 @@ public class EnemyBumblebee : Enemy<EnemyBumblebee>
 
     public void SetWeapon(float weaponCooldown, int missileDamage, float missileSpeed) {
         this._weaponReference.SetAttributes(damage: missileDamage, cooldown: weaponCooldown, speed: missileSpeed, direction: Vector2.down);
+        this._weaponReference.onShoot += PlayShotSound;
     }
+    private void PlayShotSound() => _audioManager.PlaySound(EntityAudioType.Shot);
 
     //Unity Hooks
     private void Awake() {

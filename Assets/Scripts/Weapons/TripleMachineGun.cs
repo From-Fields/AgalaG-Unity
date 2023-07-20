@@ -28,9 +28,10 @@ public class TripleMachineGun : Weapon
             bullet.Initialize(_direction, _speed, _shooter, damage: _damage);
         }
         _currentAmmuntion--;
+        onShoot?.Invoke();
     }
 
-    public override void DisposeWeapon()
+    protected override void SubDisposeWeapon()
     {
         CoroutineRunner.Instance.CancelCallback(_reloadCoroutine);
         Destroy(gameObject);

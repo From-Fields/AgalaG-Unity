@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Audio;
 
 public class Player : MonoBehaviour, Entity
 {
@@ -37,12 +38,14 @@ public class Player : MonoBehaviour, Entity
     // References
     private InputHandler _inputHandler => InputHandler.Instance;
     private Rigidbody2D _rigidbody;
+    private AudioManager _audioManager;
 
     // Input Variables
     private Vector2 _movement = Vector2.zero;
     
     // Properties
     public int MaxHealth => _maxHealth;
+    public AudioManager AudioManager => _audioManager;
 
     // Methods
     public void SwitchWeapon(Weapon newWeapon)
@@ -52,6 +55,7 @@ public class Player : MonoBehaviour, Entity
         newWeapon.transform.parent = transform;
         newWeapon.transform.position = transform.position;
         newWeapon.Initialize(LayerMask.NameToLayer("PlayerBullets"));
+        newWeapon.onShoot += PlayWeaponSound;
     }
 
     public void SwitchToDefaultWeapon() => SwitchWeapon(_defaultWeapon);
@@ -59,10 +63,13 @@ public class Player : MonoBehaviour, Entity
     public void AddPowerUp(iPowerUp newPowerUp) {
         newPowerUp.OnPickup(this);
 
-        if(newPowerUp.IsInstant)
+        if(newPowerUp.IsInstant) {
+            PlaySound(EntityAudioType.PowerUp);
             return;
+        }
 
         if(!this.powerUps.Contains(newPowerUp)) {
+            PlaySound(EntityAudioType.PowerUp);
             this.powerUps.Add(newPowerUp);
         }
     }
@@ -70,6 +77,12 @@ public class Player : MonoBehaviour, Entity
         this.powerUps.Remove(powerUp);
     }
     public void Heal(int amount) => this._currentHealth = Mathf.Clamp(_currentHealth + amount, 0, _maxHealth);
+
+    //Sound Methods
+    public void PlaySound(AudioClip clip) => _audioManager.PlaySound(clip);
+    private void PlaySound(EntityAudioType audioType) => _audioManager.PlaySound(audioType);
+    private void StopSound(EntityAudioType audioType) => _audioManager.StopSound(audioType);
+    private void PlayWeaponSound() => _audioManager.PlaySound(EntityAudioType.Shot);
 
     // Entity Implementation    
     public int health => this._currentHealth;
@@ -101,9 +114,8 @@ public class Player : MonoBehaviour, Entity
             _damage = powerUps[i].OnTakeDamage(_damage, _currentHealth); 
         }
 
-        Debug.Log(_damage);
-
-            this._currentHealth = Mathf.Clamp(_currentHealth - _damage, 0, _maxHealth);
+        this._currentHealth = Mathf.Clamp(_currentHealth - _damage, 0, _maxHealth);
+        PlaySound(EntityAudioType.Damage);
 
         if(this._currentHealth <= 0)
             this.Die();
@@ -117,6 +129,9 @@ public class Player : MonoBehaviour, Entity
         if(!die)
             return;
 
+        PlaySound(EntityAudioType.Death);
+        StopSound(EntityAudioType.Movement);
+
         gameObject.SetActive(false);
         this.onDeath?.Invoke();
         this.isDead = true;
@@ -125,12 +140,14 @@ public class Player : MonoBehaviour, Entity
     // Unity Hooks
     private void Awake() {
         _rigidbody = GetComponentInChildren<Rigidbody2D>();
+        _audioManager = GetComponentInChildren<AudioManager>();
 
         currentSpeed = _defaultSpeed;
         currentAcceleration = _defaultAcceleration;
         currentWeapon = _defaultWeapon;
         _currentHealth = _maxHealth;
         SwitchToDefaultWeapon();
+        _audioManager.PlaySound(EntityAudioType.Movement, looping: true);
     }
     private void Update() {
         if(isDead) 

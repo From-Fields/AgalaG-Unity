@@ -39,6 +39,7 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
 
     //References
     public abstract Rigidbody2D Rigidbody { get; }
+    protected AudioManager _audioManager;
 
     //Properties
     public bool IsDead => this._isDead;
@@ -84,6 +85,8 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
 
         this._droppedItem = drop;
 
+        _audioManager = GetComponentInChildren<AudioManager>(true);
+        _audioManager.PlaySound(EntityAudioType.Movement, looping: true);
         this.SubInitialize();
 
         this.gameObject.SetActive(true);
@@ -172,6 +175,8 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
     public void Die()
     {
         onDeath?.Invoke(this.score);
+        _audioManager.PlaySound(EntityAudioType.Death);
+        _audioManager.StopSound(EntityAudioType.Movement);
         
         if(_droppedItem != null) {
             Vector2 randomDirection = new Vector2(UnityEngine.Random.Range(-0.9f, 0.9f), UnityEngine.Random.Range(-0.9f, 0.9f)).normalized;

@@ -18,24 +18,24 @@ public class WaveTest : MonoBehaviour
     private void CreateWave()
     {        
         WaveController wave = new WaveController(10, new List<iWaveUnit>(new iWaveUnit[] {
-            // new WaveUnit<EnemyBumblebee>(
-            //     new Vector2(5, 6),
-            //     new MoveTowards(new Vector2(5, 3), 0.7f),
-            //     new MoveTowards(new Vector2(6, -6), 1.5f),
-            //     new Queue<iEnemyAction>(new [] {
-            //         new MoveAndShoot(new Vector2(2, 0), 1.5f, 1, 0.8f)
-            //     }),
-            //     drop: new TripleMachineGunPowerUp()
-            // ),
-            // new WaveUnit<EnemyGemini>(
-            //     new Vector2(-5, 6),
-            //     new MoveTowards(new Vector2(-5, 3)),
-            //     new MoveTowards(new Vector2(-6, -6)),
-            //     new Queue<iEnemyAction>(new[] {
-            //         new MoveAndShoot(new Vector2(-4, -3))
-            //     }),
-            //     drop: new RepairPowerUp()
-            // ),
+            new WaveUnit<EnemyBumblebee>(
+                new Vector2(5, 6),
+                new MoveTowards(new Vector2(5, 3), 0.7f),
+                new MoveTowards(new Vector2(6, -6), 1.5f),
+                new Queue<iEnemyAction>(new [] {
+                    new MoveAndShoot(new Vector2(2, 0), 1.5f, 1, 0.8f)
+                }),
+                drop: new ShieldPowerUp()
+            ),
+            new WaveUnit<EnemyGemini>(
+                new Vector2(-5, 6),
+                new MoveTowards(new Vector2(-5, 3)),
+                new MoveTowards(new Vector2(-6, -6)),
+                new Queue<iEnemyAction>(new[] {
+                    new MoveAndShoot(new Vector2(-4, -3))
+                }),
+                drop: new RepairPowerUp()
+            ),
             new WaveHazard(
                 EntityPool<Hazard>.Instance.Pool.Get(),
                 new Vector2(7.4f, 5.7f), 
