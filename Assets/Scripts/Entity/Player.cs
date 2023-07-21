@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Audio;
+using System;
 
 public class Player : MonoBehaviour, Entity
 {
@@ -11,6 +12,7 @@ public class Player : MonoBehaviour, Entity
     [SerializeField]
     private int _maxHealth = 3;
     private int _currentHealth;
+    private bool _isInvulnerable;
 
     [HideInInspector]
     public Weapon currentWeapon;
@@ -39,6 +41,7 @@ public class Player : MonoBehaviour, Entity
     private InputHandler _inputHandler => InputHandler.Instance;
     private Rigidbody2D _rigidbody;
     private AudioManager _audioManager;
+    private SpriteRenderer _visuals;
 
     // Input Variables
     private Vector2 _movement = Vector2.zero;
@@ -77,6 +80,42 @@ public class Player : MonoBehaviour, Entity
         this.powerUps.Remove(powerUp);
     }
     public void Heal(int amount) => this._currentHealth = Mathf.Clamp(_currentHealth + amount, 0, _maxHealth);
+    private void SetInvulnerability(bool invulnerable) {
+        _isInvulnerable = invulnerable;
+        if(invulnerable)
+            StartCoroutine(WaitForInvulnerability(1.5f));
+
+        Debug.Log(invulnerable);
+    }
+    private IEnumerator WaitForInvulnerability(float time) {
+        float accumulator = 0;
+        float currTime = Time.time;
+        float targetTime = currTime + time;
+        Color c;
+
+        while(currTime < targetTime) {
+            accumulator += Time.deltaTime;
+            currTime += Time.deltaTime;
+
+            if(accumulator > time / 12) {
+                c = _visuals.color;
+                float a = (c.a == 1) ? 0.5f : 1;
+
+                _visuals.color = new Color(c.r, c.g, c.b, a);
+
+                accumulator = 0;
+            }
+
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        c = _visuals.color;
+        _visuals.color = new Color(c.r, c.g, c.b, 1);
+        SetInvulnerability(false);
+
+        yield return null;
+    }
 
     //Sound Methods
     public void PlaySound(AudioClip clip) => _audioManager.PlaySound(clip);
@@ -108,6 +147,9 @@ public class Player : MonoBehaviour, Entity
     }
 
     public void TakeDamage(int damage) {
+        if(_isInvulnerable)
+            return;
+
         int _damage = damage;
 
         for (int i = 0; i < powerUps.Count; i++) {
@@ -119,6 +161,8 @@ public class Player : MonoBehaviour, Entity
 
         if(this._currentHealth <= 0)
             this.Die();
+
+        SetInvulnerability(true);
     }
     public void Die() {
         bool die = true;    
@@ -132,7 +176,7 @@ public class Player : MonoBehaviour, Entity
         PlaySound(EntityAudioType.Death);
         StopSound(EntityAudioType.Movement);
 
-        GetComponentInChildren<SpriteRenderer>().enabled = false;
+        _visuals.enabled = false;
         _rigidbody.simulated = false;
 
         _audioManager.WaitForAudioClipDone(() => gameObject.SetActive(false));
@@ -145,7 +189,9 @@ public class Player : MonoBehaviour, Entity
     private void Awake() {
         _rigidbody = GetComponentInChildren<Rigidbody2D>();
         _audioManager = GetComponentInChildren<AudioManager>();
+        _visuals = GetComponentInChildren<SpriteRenderer>();
 
+        _isInvulnerable = false;
         currentSpeed = _defaultSpeed;
         currentAcceleration = _defaultAcceleration;
         currentWeapon = _defaultWeapon;
