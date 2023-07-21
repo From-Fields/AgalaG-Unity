@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class WaveController
 {
@@ -17,12 +18,12 @@ public class WaveController
         this._timeout = timeout;
         this.unitList = unitList;
     }
-    public void Initialize()
+    public void Initialize(Bounds levelBounds)
     {
         foreach (iWaveUnit unit in unitList)
         {
             unit.onUnitReleased += RemoveUnitFromWave;
-            unit.Initialize();
+            unit.Initialize(levelBounds);
         }
 
         CoroutineRunner.Instance.CallbackTimer(_timeout, TimeOutAllUnits);

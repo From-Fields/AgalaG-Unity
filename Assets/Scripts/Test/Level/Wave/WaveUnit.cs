@@ -20,7 +20,7 @@ public class WaveUnit<T>: iWaveUnit where T: Enemy<T>
     public Action<iWaveUnit> onUnitReleased { get; set; }
 
     public WaveUnit(
-        Vector2 startingPoint, iEnemyAction startingAction, iEnemyAction timeoutAction, Queue<iEnemyAction> actions, 
+        Vector2 startingPoint, iEnemyAction startingAction, iEnemyAction timeoutAction, Queue<iEnemyAction> actions,
         Action<int> onDeath = null, Action onRelease = null, float timeout = -1, PowerUp drop = null
     ) {
         _enemy = EntityPool<T>.Instance.Pool.Get();
@@ -40,9 +40,9 @@ public class WaveUnit<T>: iWaveUnit where T: Enemy<T>
         _hasTimedOut = false;
     }
 
-    public void Initialize()
+    public void Initialize(Bounds levelBounds)
     {
-        _enemy.Initialize(_actions, _startingAction, _timeoutAction, _startingPoint, _drop);
+        _enemy.Initialize(_actions, _startingAction, _timeoutAction, _startingPoint, levelBounds, drop: _drop);
 
         if(_timeout > 0)
             CoroutineRunner.Instance.CallbackTimer(_timeout, ExecuteTimeoutAction);

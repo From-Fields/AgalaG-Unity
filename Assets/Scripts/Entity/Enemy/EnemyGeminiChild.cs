@@ -84,10 +84,13 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
         this._collisionDamage = this._defaultCollisionDamage;
 
         this.onDeath += (_) => this._wasKilled = true;
+        this.onDeath += (_) => OnDeath();
     }
-    protected override void SubReserve() {
-        if(_wasKilled)
+    protected void OnDeath() {
+        if(_wasKilled) {
             this._parent.TakeDamage(1);
+            this._parent.PlayDeathSound();
+        }
     }
     protected override void SubUpdate() {
         Vector2 fromChild = (Position - _parent.Position).normalized;

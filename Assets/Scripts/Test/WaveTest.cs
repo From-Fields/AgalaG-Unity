@@ -19,8 +19,8 @@ public class WaveTest : MonoBehaviour
     {        
         WaveController wave = new WaveController(10, new List<iWaveUnit>(new iWaveUnit[] {
             new WaveUnit<EnemyBumblebee>(
-                new Vector2(5, 6),
-                new MoveTowards(new Vector2(5, 3), 0.7f),
+                new Vector2(0, 9),
+                new MoveTowards(new Vector2(0, 3), 0.7f),
                 new MoveTowards(new Vector2(6, -6), 1.5f),
                 new Queue<iEnemyAction>(new [] {
                     new MoveAndShoot(new Vector2(2, 0), 1.5f, 1, 0.8f)
@@ -46,6 +46,13 @@ public class WaveTest : MonoBehaviour
         }));
 
         wave.onWaveDone += CreateWave;
-        wave.Initialize();
+        wave.Initialize(new Bounds(new Vector3(0, 0), new Vector3(18.8f, 11.1f)));
+    }
+
+    
+
+    void OnDrawGizmos()
+    {
+        Gizmos.DrawCube(new Vector3(0, 0), new Vector3(18.8f, 11.1f));
     }
 }

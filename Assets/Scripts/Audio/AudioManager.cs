@@ -41,8 +41,10 @@ public class AudioManager : MonoBehaviour
 
         if(looping) {
             PlaySoundLooping(audioType, clip);
-        } else 
-            _oneshotAudioSource.PlayOneShot(clip);
+        } else {
+            _oneshotAudioSource.clip = clip;
+            _oneshotAudioSource.Play();
+        }
     }
     private void PlaySoundLooping(EntityAudioType audioType, AudioClip clip) {
         AudioSource source;
@@ -72,6 +74,18 @@ public class AudioManager : MonoBehaviour
         
         source.Stop();
         source.clip = null;        
+    }
+
+    public void WaitForAudioClipDone(System.Action callback) => StartCoroutine(AudioClipDoneCallback(callback));
+
+    private IEnumerator AudioClipDoneCallback(System.Action callback) {
+        while(_oneshotAudioSource.isPlaying) {
+            yield return new WaitForEndOfFrame();
+        }
+
+        callback.Invoke();
+
+        yield return null;
     }
 }
 

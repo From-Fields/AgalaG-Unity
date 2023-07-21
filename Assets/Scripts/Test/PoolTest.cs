@@ -33,7 +33,7 @@ public class PoolTest : MonoBehaviour
         iEnemyAction action = new WaitSeconds(1);
         Queue<iEnemyAction> actions = new Queue<iEnemyAction>(new[] {action});
         iWaveUnit unit = new WaveUnit<EnemyKamikaze>(position, action, action, actions, Score);
-        unit.Initialize();
+        unit.Initialize(new Bounds(new Vector3(0, 0), new Vector3(11.1f, 18.8f)));
 
         _positions.Enqueue(position);
         

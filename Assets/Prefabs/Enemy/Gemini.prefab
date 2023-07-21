@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damageSound: {fileID: 0}
-  _deathSound: {fileID: 0}
+  _deathSound: {fileID: 8300000, guid: 89d902bc5cda75944811e588b1382a65, type: 3}
   _movementSound: {fileID: 8300000, guid: 55ffb368858971d4c832385fe603c0f7, type: 3}
   _shotSound: {fileID: 0}
   _powerUpSound: {fileID: 0}

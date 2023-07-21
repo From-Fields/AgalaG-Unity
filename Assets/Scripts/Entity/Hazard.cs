@@ -43,7 +43,6 @@ public class Hazard: MonoBehaviour, Entity, iPoolableEntity<Hazard>
     private bool WillBounce() => (_canBounce && _isWithinBounds && _currentBounces < _maxBounces);
     private void ReflectMovement(Collider2D other) 
     {
-        Debug.Log("Reflecting!");
         Vector2 contact = other.ClosestPoint(_rigidbody.position);
         Vector2 velocity = _rigidbody.velocity;
         Vector2 normal = (Vector2) transform.position - contact;
@@ -107,6 +106,9 @@ public class Hazard: MonoBehaviour, Entity, iPoolableEntity<Hazard>
 
     public void ReserveToPool() 
     {
+        _visuals.SetEnabled(true);
+        _rigidbody.simulated = true;
+
         if(gameObject.activeSelf == false)
             return;
 
@@ -129,7 +131,11 @@ public class Hazard: MonoBehaviour, Entity, iPoolableEntity<Hazard>
             Die();
     }
     public void Die() {
-        _audioManager.PlaySound(EntityAudioType.Bounce);
-        ReserveToPool();
+        _audioManager.PlaySound(EntityAudioType.Death);
+
+        _visuals.SetEnabled(false);
+        _rigidbody.simulated = false;
+
+        _audioManager.WaitForAudioClipDone(ReserveToPool);
     }
 }

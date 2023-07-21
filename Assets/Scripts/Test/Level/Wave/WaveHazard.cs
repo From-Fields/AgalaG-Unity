@@ -39,7 +39,7 @@ public class WaveHazard: iWaveUnit
             onUnitReleased?.Invoke(this);
     }
 
-    public void Initialize() {
+    public void Initialize(Bounds bounds) {
         _hazard.Initialize(
             _position, _direction, _sprite,_speed, _damage, _health, _rotate, _rotationSpeed, _scale, _maxBounces
         );

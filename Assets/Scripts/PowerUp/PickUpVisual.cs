@@ -51,6 +51,7 @@ public class PickUpVisual : MonoBehaviour
 
         transform.Rotate(new Vector3(0, 0, _rotationSpeed * Time.deltaTime));
     }
+    internal void SetEnabled(bool enabled) => _renderer.enabled = enabled;
 
     // Unity Hooks
     private void Awake() {
@@ -66,4 +67,5 @@ public class PickUpVisual : MonoBehaviour
         DoRotation();
         DoScale();
     }
+
 }

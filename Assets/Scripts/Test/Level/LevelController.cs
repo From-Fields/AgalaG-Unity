@@ -7,7 +7,7 @@ public class LevelController: MonoBehaviour
     [SerializeField]
     private Player _player;
     [SerializeField]
-    private iLevel _level;    
+    private iLevel _level;
 
     private WaveController _currentWave;
 
@@ -27,7 +27,7 @@ public class LevelController: MonoBehaviour
 
         _currentWave = _level.GetNextWave();
         _currentWave.onWaveDone += CallNextWave;
-        _currentWave.Initialize();
+        _currentWave.Initialize(_level.Bounds);
     }
     private void EndLevel() {
         onNoWave?.Invoke();

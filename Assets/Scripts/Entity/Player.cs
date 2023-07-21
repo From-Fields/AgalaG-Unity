@@ -132,7 +132,11 @@ public class Player : MonoBehaviour, Entity
         PlaySound(EntityAudioType.Death);
         StopSound(EntityAudioType.Movement);
 
-        gameObject.SetActive(false);
+        GetComponentInChildren<SpriteRenderer>().enabled = false;
+        _rigidbody.simulated = false;
+
+        _audioManager.WaitForAudioClipDone(() => gameObject.SetActive(false));
+
         this.onDeath?.Invoke();
         this.isDead = true;
     }
