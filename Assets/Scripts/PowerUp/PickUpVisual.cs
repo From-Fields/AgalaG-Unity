@@ -20,7 +20,7 @@ public class PickUpVisual : MonoBehaviour
     // Local Variables
     private bool _scaleUp = true;
 
-    internal void Initialize(Sprite sprite, bool rotate, float rotationSpeed, bool doScale, float maximumScale, float scaleSpeed) {
+    internal void Initialize(Sprite sprite, bool rotate, float rotationSpeed, bool doScale = false, float maximumScale = 1, float scaleSpeed = 0, Vector2? baseScale = null) {
         gameObject.SetActive(true);
 
         this._renderer.sprite = sprite;
@@ -30,6 +30,8 @@ public class PickUpVisual : MonoBehaviour
         this._rotationSpeed = rotationSpeed;
         this._maximumScale = maximumScale;
         this._scaleSpeed = scaleSpeed;
+
+        transform.localScale = (baseScale.HasValue) ? baseScale.Value : Vector2.one;
     }
 
     private void DoScale() {
@@ -49,6 +51,7 @@ public class PickUpVisual : MonoBehaviour
 
         transform.Rotate(new Vector3(0, 0, _rotationSpeed * Time.deltaTime));
     }
+    internal void SetEnabled(bool enabled) => _renderer.enabled = enabled;
 
     // Unity Hooks
     private void Awake() {
@@ -64,4 +67,5 @@ public class PickUpVisual : MonoBehaviour
         DoRotation();
         DoScale();
     }
+
 }

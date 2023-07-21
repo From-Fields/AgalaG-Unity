@@ -11,9 +11,10 @@ public class Missile : Weapon
 
     private Coroutine _reloadCoroutine = null;
 
-    protected override void Initialize()
+    public override void Initialize(LayerMask layer)
     {
         _shooter = transform.parent.gameObject.tag;
+        _layer = layer;
     }
 
     public override void Shoot()
@@ -27,9 +28,10 @@ public class Missile : Weapon
         bullet.gameObject.layer = (_layer != -1) ? _layer : gameObject.layer;
         bullet.Initialize(_direction, _speed, _shooter, damage: _damage, explosion: true);
         _currentAmmuntion--;
+        onShoot?.Invoke();
     }
 
-    public override void DisposeWeapon()
+    protected override void SubDisposeWeapon()
     {
         CoroutineRunner.Instance.CancelCallback(_reloadCoroutine);
         Destroy(gameObject);

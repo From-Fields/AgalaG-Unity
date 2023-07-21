@@ -8,9 +8,10 @@ public class TripleMachineGun : Weapon
 
     private Coroutine _reloadCoroutine = null;
 
-    protected override void Initialize()
+    public override void Initialize(LayerMask layer)
     {
         _shooter = transform.parent.tag;
+        _layer = layer;
     }
 
     public override void Shoot()
@@ -27,9 +28,10 @@ public class TripleMachineGun : Weapon
             bullet.Initialize(_direction, _speed, _shooter, damage: _damage);
         }
         _currentAmmuntion--;
+        onShoot?.Invoke();
     }
 
-    public override void DisposeWeapon()
+    protected override void SubDisposeWeapon()
     {
         CoroutineRunner.Instance.CancelCallback(_reloadCoroutine);
         Destroy(gameObject);

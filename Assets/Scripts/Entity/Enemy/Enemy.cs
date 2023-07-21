@@ -39,6 +39,9 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
 
     //References
     public abstract Rigidbody2D Rigidbody { get; }
+    protected AudioManager _audioManager;
+    private SpriteRenderer _visuals;
+    protected Bounds _levelBounds;
 
     //Properties
     public bool IsDead => this._isDead;
@@ -71,7 +74,7 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
         if(_currentAction == null)
             Reserve();
     }
-    public void Initialize(Queue<iEnemyAction> actionQueue, iEnemyAction startingAction, iEnemyAction timeoutAction, Vector2 startingPoint, PowerUp drop = null)
+    public void Initialize(Queue<iEnemyAction> actionQueue, iEnemyAction startingAction, iEnemyAction timeoutAction, Vector2 startingPoint, Bounds levelBounds, PowerUp drop = null)
     {
         if(actionQueue == null || timeoutAction == null)
             throw new ArgumentNullException("Action queue and Timeout action may not be null");
@@ -83,15 +86,25 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
         this.transform.position = startingPoint;
 
         this._droppedItem = drop;
+        this._levelBounds = levelBounds;
 
         this.SubInitialize();
-
+        
         this.gameObject.SetActive(true);
+        _audioManager = GetComponentInChildren<AudioManager>(true);
+        _visuals = GetComponentInChildren<SpriteRenderer>(true);
+        _audioManager.PlaySound(EntityAudioType.Movement, looping: true);
+
 
         if(this._startingAction != null)
             this.SwitchAction(this._startingAction);
         else
             this.ExecuteNextAction();
+
+            
+
+        if(this is EnemyGeminiChild)
+        Debug.Log("Initialized");
     }
     public void Reserve()
     {
@@ -105,11 +118,19 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
         this.Rigidbody.position = Vector3.zero;
         this.transform.position = Vector3.zero;
         this.Rigidbody.velocity = Vector3.zero;
+        
         this.gameObject.SetActive(false);
+        if(_visuals != null)
+            _visuals.enabled = true;
+        Rigidbody.simulated = true;
+        
         this.SubReserve();
         this.ReserveToPool();
 
         this.onRelease?.Invoke();
+
+        if(this is EnemyGeminiChild)
+        Debug.Log("Reserved");
     }
 
     //Abstract Methods
@@ -132,8 +153,7 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
     }
 
     //Unity Hooks
-    public void Update()
-    {
+    public void Update() {
         if(_isDead || _currentAction == null)
             return;
 
@@ -143,8 +163,7 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
         _currentAction?.Update(this);
         SubUpdate();
     }
-    public void FixedUpdate()
-    {
+    public void FixedUpdate() {
         if(_isDead || _currentAction == null)
             return;
         
@@ -171,14 +190,25 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
     public abstract void TakeDamage(int damage);
     public void Die()
     {
+        if(_isDead)
+            return;
+
         onDeath?.Invoke(this.score);
-        
+        this._isDead = true;
+
         if(_droppedItem != null) {
             Vector2 randomDirection = new Vector2(UnityEngine.Random.Range(-0.9f, 0.9f), UnityEngine.Random.Range(-0.9f, 0.9f)).normalized;
-            SingletonObjectPool<PickUp>.Instance.Pool.Get().Initialize(_droppedItem, Rigidbody.transform.position, randomDirection);
+            SingletonObjectPool<PickUp>.Instance.Pool.Get().Initialize(_droppedItem, Rigidbody.transform.position, randomDirection, _levelBounds);
         }
 
-        Reserve();
+        _audioManager.PlaySound(EntityAudioType.Death);
+        _audioManager.StopSound(EntityAudioType.Movement);
+
+        Rigidbody.simulated = false;
+        if(_visuals != null)
+            _visuals.enabled = false;
+
+        _audioManager.WaitForAudioClipDone(Reserve);
     }
 
     //iEnemy

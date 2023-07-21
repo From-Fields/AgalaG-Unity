@@ -18,16 +18,48 @@ public class PickUp : MonoBehaviour, iPoolableObject<PickUp>
     private Rigidbody2D _rigidbody;
     private PickUpVisual _visuals;
 
+    private AudioManager _audioManager;
+
+    private Vector3 _position = Vector3.zero;
+
     public void Initialize(
-        PowerUp powerUp, Vector2 position, Vector2 direction, float speed = 5, 
+        PowerUp powerUp, Vector2 position, Vector2 direction, 
+        Bounds levelBounds, float speed = 5, 
         bool rotate = true, float rotationSpeed = 100f, 
         bool doScale = true, float maximumScale = 1.3f, float scaleSpeed = 5f
     ) {
         gameObject.SetActive(true);
         this._powerUp = powerUp;
-        transform.position = position;
+
+        _rigidbody.position = GetStartingPosition(position, levelBounds);
+        transform.position = GetStartingPosition(position, levelBounds);
+
         ApplyMovement(direction, speed);
         this._visuals.Initialize(powerUp.Sprite, rotate, rotationSpeed, doScale, maximumScale, scaleSpeed);
+    }
+
+    private Vector2 GetStartingPosition(Vector3 position, Bounds levelBounds) {
+        if(levelBounds.Contains(position))
+            return position;
+
+        Vector3 colliderSize = _collider.bounds.extents;
+
+        float minX = levelBounds.center.x - levelBounds.extents.x + (colliderSize.x * 2);
+        float maxX = levelBounds.center.x + levelBounds.extents.x - (colliderSize.x * 2);
+        float minY = levelBounds.center.y - levelBounds.extents.y + (colliderSize.y * 2);
+        float maxY = levelBounds.center.y + levelBounds.extents.y - (colliderSize.y * 2);
+
+        position.x = (position.x < minX ) ? minX 
+            : (position.x > maxX) ? maxX
+                : position.x;
+
+        position.y = (position.y < minY ) ? minY 
+            : (position.y > maxY) ? maxY
+                : position.y; 
+
+        _position = position;
+
+        return position;
     }
 
     // Movement Methods
@@ -39,6 +71,7 @@ public class PickUp : MonoBehaviour, iPoolableObject<PickUp>
         normal.Normalize();
 
         Vector2 targetVelocity = velocity - 2 * (Vector2.Dot(velocity, normal) * normal);
+        _audioManager.PlaySound(EntityAudioType.Bounce);
 
         _rigidbody.velocity = targetVelocity;
     }
@@ -49,6 +82,7 @@ public class PickUp : MonoBehaviour, iPoolableObject<PickUp>
         _collider = gameObject.GetComponent<Collider2D>();
         _rigidbody = gameObject.GetComponent<Rigidbody2D>();
         _visuals = GetComponentInChildren<PickUpVisual>();
+        _audioManager = GetComponentInChildren<AudioManager>();
 
         #if UNITY_EDITOR
             if(debug) {
@@ -104,4 +138,11 @@ public class PickUp : MonoBehaviour, iPoolableObject<PickUp>
                 _powerUp = new RepairPowerUp();
         }
     #endif
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+
+        Gizmos.DrawSphere(_position, 0.3f);
+    }
 }

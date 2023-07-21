@@ -16,7 +16,8 @@ public class GeminiTest : MonoBehaviour
                 new MoveAndShoot(new Vector2(0.75f, 1.25f), speedModifier: 1, trackingSpeed: 10, stopOnEnd: false),
                 new MoveAndShoot(new Vector2(-1.75f, -1.25f), speedModifier: 1, trackingSpeed: 10)
             }), 
-            new Shoot(2), new WaitSeconds(20) , _enemy.Position
+            new Shoot(2), new WaitSeconds(20) , _enemy.Position,
+            new Bounds(new Vector3(0, 0), new Vector3(11.1f, 18.8f))
         );
     }
 

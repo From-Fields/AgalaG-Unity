@@ -30,6 +30,8 @@ public class EnemyGemini : Enemy<EnemyGemini>
     private Rigidbody2D _rigidbody;
     public IObjectPool<EnemyGeminiChild> _childPool => EntityPool<EnemyGeminiChild>.Instance.Pool;
 
+    internal void PlayDeathSound() => _audioManager.PlaySound(EntityAudioType.Death);
+    
     //Unity Hooks
     private void Awake() {
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -84,9 +86,7 @@ public class EnemyGemini : Enemy<EnemyGemini>
             float yOffset = (i < 1) ? -1 * this._geminiPositionOffset : this._geminiPositionOffset;
             Vector2 position = new Vector2(this.Position.x, this.Position.y + yOffset);
 
-            Debug.Log(position);
-
-            child.Initialize(new Queue<iEnemyAction>(), null, new WaitSeconds(200), position);
+            child.Initialize(new Queue<iEnemyAction>(), null, new WaitSeconds(200), position, _levelBounds);
             child.SetParent(this, _geminiPositionOffset, _orbitingVelocity);
             child.SetWeapon(_weaponCooldown, _geminiMissileDamage, _missileSpeed);
         }

@@ -6,6 +6,7 @@ using UnityEngine;
 public class ShieldPowerUp : PowerUp
 {
     public override Sprite Sprite => PrefabRepository.Instance.GetPowerUpOfType(typeof(ShieldPowerUp));
+    public AudioClip clip => PrefabRepository.Instance.GetAudioOfType(typeof(ShieldPowerUp));
     public override bool IsInstant => false;
 
     public override void OnPickup(Player player) {
@@ -19,6 +20,7 @@ public class ShieldPowerUp : PowerUp
         return damage - 1;
     }
     public override void OnEnd() {
+        _player.PlaySound(clip);
         _player.RemovePowerUp(this);
     }
 }

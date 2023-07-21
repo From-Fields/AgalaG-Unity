@@ -20,11 +20,12 @@ public abstract class Weapon : MonoBehaviour
     protected string _shooter;
     protected bool _canShoot = true;
 
+    public Action onShoot;
+
     public int MaxAmmunition => _maxAmmunition;
     public int CurrentAmmunition => _currentAmmuntion;
 
     void Awake() {
-        Initialize();
         _currentAmmuntion = _maxAmmunition;
         _canShoot = true;
     }
@@ -41,9 +42,13 @@ public abstract class Weapon : MonoBehaviour
 
     protected void OnCooldownEnd() => _canShoot = true;
 
-    public virtual void DisposeWeapon() { }
+    public void DisposeWeapon() {
+        onShoot = null;
+        SubDisposeWeapon();
+    }
+    protected abstract void SubDisposeWeapon();
 
-    protected abstract void Initialize();
+    public abstract void Initialize(LayerMask layer);
     public abstract bool isEmpty();
     public abstract void Shoot();
 }

@@ -7,8 +7,9 @@ public class DefaultWeapon : Weapon
 {
     private Vector2 _direction = Vector2.up;
 
-    protected override void Initialize() {
+    public override void Initialize(LayerMask layer) {
         _shooter = gameObject.tag;
+        _layer = layer;
     }
 
     // A arma padrao nao tera limite de tiros, entao nao fara nada em isEmpty
@@ -27,7 +28,10 @@ public class DefaultWeapon : Weapon
         bullet = Instantiate(bulletPrefab, spawnPoint[0].transform.position, Quaternion.identity).GetComponent<Bullet>();
         bullet.gameObject.layer = (_layer != -1) ? _layer : gameObject.layer;
         bullet.Initialize(_direction, _speed, _shooter, damage: _damage);
+        onShoot?.Invoke();
     }
+
+    protected override void SubDisposeWeapon() { } // Do Nothing
 
     public void SetAttributes(Vector2? direction = null, int maxAmmunition = -1, float speed = -1, float cooldown = -1, int damage = -1, int layer = -1) {
         this._direction = direction.HasValue ? direction.Value : Vector2.up;

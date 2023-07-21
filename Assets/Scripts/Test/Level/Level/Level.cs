@@ -8,9 +8,12 @@ public class Level: ScriptableObject, iLevel
 {
     [SerializeField]
     private List<WaveController> _waveList = new List<WaveController>();
+    [SerializeField]
+    private Bounds _bounds;
     private Queue<WaveController> _waveQueue;
 
     public List<WaveController> WaveList => _waveList;
+    public Bounds Bounds => _bounds;
 
     public bool HasNextWave {
         get {

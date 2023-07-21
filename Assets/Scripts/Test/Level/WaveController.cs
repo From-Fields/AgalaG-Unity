@@ -18,12 +18,12 @@ public class WaveController
         this._timeout = timeout;
         this.unitList = unitList;
     }
-    public void Initialize()
+    public void Initialize(Bounds levelBounds)
     {
         foreach (iWaveUnit unit in unitList)
         {
             unit.onUnitReleased += RemoveUnitFromWave;
-            unit.Initialize();
+            unit.Initialize(levelBounds);
         }
 
         CoroutineRunner.Instance.CallbackTimer(_timeout, TimeOutAllUnits);
@@ -58,5 +58,9 @@ public class WaveController
 
             unitList[i]?.Reserve();
         }
+        if(_isDone)
+            return;
+
+        onWaveDone?.Invoke();
     }
 }

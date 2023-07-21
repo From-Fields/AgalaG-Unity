@@ -33,7 +33,9 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
     }
     public void SetWeapon(float weaponCooldown, int missileDamage, float missileSpeed) {
         this._weapon.SetAttributes(damage: missileDamage, cooldown: weaponCooldown, speed: missileSpeed, direction: Vector2.down);
+        this._weapon.onShoot += PlayShotSound;
     }
+    private void PlayShotSound() => _audioManager.PlaySound(EntityAudioType.Shot);
 
     //Unity Hooks
     private void Awake() {
@@ -82,10 +84,13 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
         this._collisionDamage = this._defaultCollisionDamage;
 
         this.onDeath += (_) => this._wasKilled = true;
+        this.onDeath += (_) => OnDeath();
     }
-    protected override void SubReserve() {
-        if(_wasKilled)
+    protected void OnDeath() {
+        if(_wasKilled) {
             this._parent.TakeDamage(1);
+            this._parent.PlayDeathSound();
+        }
     }
     protected override void SubUpdate() {
         Vector2 fromChild = (Position - _parent.Position).normalized;
