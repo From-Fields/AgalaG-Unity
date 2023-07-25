@@ -1,9 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Assets/UI/Stylesheet/MainMenu-Stylesheet.uss?fileID=7433441132597879392&amp;guid=9740032564dbb984ba1e64272f981632&amp;type=3#MainMenu-Stylesheet" />
-    <ui:Label text="AgalaG" display-tooltip-when-elided="true" name="Title" usage-hints="None" style="left: 0; font-size: 150px; -unity-text-align: upper-center; -unity-font: none; -unity-font-style: bold; top: 10%; color: rgb(255, 156, 76);" />
-    <ui:VisualElement name="Container_Buttons" style="position: relative; left: auto; align-items: stretch; justify-content: center; height: 500px; top: 20%; bottom: 20%;">
-        <ui:Button text="Start Game" display-tooltip-when-elided="true" name="Btn_Start" class="button" />
-        <ui:Button text="Settings" display-tooltip-when-elided="true" name="Btn_Settings" class="button" />
-        <ui:Button text="Exit" display-tooltip-when-elided="true" name="Btn_Exit" class="button" />
+    <ui:VisualElement name="container" style="flex-grow: 1;">
+        <ui:Label text="AgalaG" display-tooltip-when-elided="true" name="Title" usage-hints="None" style="left: 0; font-size: 150px; -unity-text-align: upper-center; -unity-font: none; -unity-font-style: bold; top: 10%; color: rgb(255, 156, 76);" />
+        <ui:VisualElement name="Container_Buttons" style="position: relative; left: auto; align-items: center; justify-content: center; height: 60%; top: 20%; bottom: 20%; min-height: 500px;">
+            <ui:Button text="Start Game" display-tooltip-when-elided="true" name="Btn_Start" class="button" />
+            <ui:Button text="Settings" display-tooltip-when-elided="true" name="Btn_Settings" class="button" />
+            <ui:Button text="Exit" display-tooltip-when-elided="true" name="Btn_Exit" class="button" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
