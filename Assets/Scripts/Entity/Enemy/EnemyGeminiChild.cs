@@ -82,6 +82,7 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
         this._wasKilled = false;
         this._currentHealth = this._maxHealth;
         this._collisionDamage = this._defaultCollisionDamage;
+        this._droppedItem = null;
 
         this.onDeath += (_) => this._wasKilled = true;
         this.onDeath += (_) => OnDeath();

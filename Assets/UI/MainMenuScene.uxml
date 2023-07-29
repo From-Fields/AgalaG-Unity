@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="MainMenu" src="project://database/Assets/UI/MainMenu.uxml?fileID=9197481963319205126&amp;guid=6a7628d891719b948b4671d3bbe10e6a&amp;type=3#MainMenu" />
+    <ui:Template name="SettingsMenu" src="project://database/Assets/UI/SettingsMenu.uxml?fileID=9197481963319205126&amp;guid=42699897a3293e948a4dd06f1de97471&amp;type=3#SettingsMenu" />
+    <ui:GroupBox name="scene_container" style="flex-grow: 1; height: 100%; width: 100%;">
+        <ui:Instance template="MainMenu" name="MainOptions" picking-mode="Ignore" style="flex-grow: 1; width: 100%; height: 100%; position: absolute;" />
+        <ui:Instance template="SettingsMenu" name="Settings" picking-mode="Ignore" style="flex-grow: 1; position: absolute; width: 100%; height: 100%; display: flex;" />
+    </ui:GroupBox>
+</ui:UXML>

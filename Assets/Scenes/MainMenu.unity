@@ -123,6 +123,52 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &806350666
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 806350668}
+  - component: {fileID: 806350667}
+  m_Layer: 0
+  m_Name: AudioSettings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &806350667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806350666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2120009f26695214d92ac665c610d8d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PrintTrace: 0
+  _mainMixer: {fileID: 24100000, guid: be358bf730689264ebf305441ce85414, type: 2}
+--- !u!4 &806350668
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806350666}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1386727037
 GameObject:
   m_ObjectHideFlags: 0
@@ -155,7 +201,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PanelSettings: {fileID: 11400000, guid: d0c45151cbdb26f439500613af9c780a, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 6a7628d891719b948b4671d3bbe10e6a, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: 6f5593ff208e82f4d8c2b11b765d900b, type: 3}
   m_SortingOrder: 0
 --- !u!4 &1386727039
 Transform:
@@ -184,6 +230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e99a70a4e073af4293a21333e74b467, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioSettings: {fileID: 0}
 --- !u!1 &1731229903
 GameObject:
   m_ObjectHideFlags: 0

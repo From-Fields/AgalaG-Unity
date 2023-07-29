@@ -26,7 +26,7 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
 
     //Drops
     [SerializeField]
-    private PowerUp _droppedItem = null;
+    protected PowerUp _droppedItem = null;
 
     protected bool _isDead;
 
@@ -85,7 +85,11 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
         this.Rigidbody.position = startingPoint;
         this.transform.position = startingPoint;
 
-        this._droppedItem = drop;
+        if(drop != null)
+            this._droppedItem = drop;
+        else
+            this._droppedItem = PowerUpManager.GetRandomPowerup();
+
         this._levelBounds = levelBounds;
 
         this.SubInitialize();
