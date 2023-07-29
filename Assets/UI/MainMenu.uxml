@@ -1,33 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Assets/UI/Stylesheet/MainMenu-Stylesheet.uss?fileID=7433441132597879392&amp;guid=9740032564dbb984ba1e64272f981632&amp;type=3#MainMenu-Stylesheet" />
-    <ui:GroupBox name="MainOptions" style="width: 100%; height: 100%; position: absolute; left: 0; top: 0; right: 0; bottom: 0;">
+    <ui:GroupBox name="MainOptions" style="width: 100%; height: 100%; position: absolute; left: 0; top: 0; right: 0; bottom: 0; flex-grow: 1;">
         <ui:Label text="AgalaG" display-tooltip-when-elided="true" name="Title" usage-hints="None" style="left: 0; font-size: 150%; -unity-text-align: upper-center; -unity-font: none; -unity-font-style: bold; top: 5%; color: rgb(255, 156, 76);" />
         <ui:VisualElement name="Container_Buttons" style="position: absolute; left: auto; align-items: center; justify-content: center; height: 500px; top: auto; bottom: 10%; width: 100%; opacity: 1; display: flex;">
             <ui:Button text="Start Game" display-tooltip-when-elided="true" name="Btn_Start" class="button" />
             <ui:Button text="Settings" display-tooltip-when-elided="true" name="Btn_Settings" class="button" />
             <ui:Button text="Exit" display-tooltip-when-elided="true" name="Btn_Exit" class="button" />
         </ui:VisualElement>
-    </ui:GroupBox>
-    <ui:GroupBox name="Settings" style="width: 100%; height: 100%; visibility: hidden;">
-        <ui:Label text="Settings" display-tooltip-when-elided="true" name="Title" usage-hints="None" style="left: 0; font-size: 150%; -unity-text-align: upper-center; -unity-font: none; -unity-font-style: bold; top: 5%; color: rgb(255, 156, 76);" />
-        <ui:GroupBox name="Configs" style="width: 100%; height: 550px; bottom: 5%; position: absolute; align-items: center;">
-            <ui:GroupBox name="FullscreenContainer" style="width: 50%; height: 100px; justify-content: space-around; flex-direction: row; padding-left: 42px; padding-right: 42px; padding-top: 10px; padding-bottom: 10px; align-items: center;">
-                <ui:Label text="Fullscreen" display-tooltip-when-elided="true" style="font-size: 50px; -unity-font-style: bold; color: rgb(239, 239, 239);" />
-                <ui:Toggle value="false" name="Toggle_Fullscreen" />
-            </ui:GroupBox>
-            <ui:GroupBox name="MasterVolume" style="flex-direction: row; width: 50%; height: 100px; padding-left: 185px; padding-right: 42px; padding-top: 10px; padding-bottom: 10px; align-items: center; justify-content: flex-start;">
-                <ui:Label text="Master" display-tooltip-when-elided="true" style="font-size: 50px; -unity-font-style: bold; color: rgb(239, 239, 239);" />
-                <ui:SliderInt picking-mode="Ignore" value="70" high-value="100" style="width: 20%; scale: 2 2; transform-origin: center; align-items: center; flex-direction: row; justify-content: space-between; position: relative; left: 20%;" />
-            </ui:GroupBox>
-            <ui:GroupBox name="MusicVolume" style="flex-direction: row; width: 50%; height: 100px; padding-left: 185px; padding-right: 42px; padding-top: 10px; padding-bottom: 10px; align-items: center; justify-content: flex-start;">
-                <ui:Label text="Music" display-tooltip-when-elided="true" style="font-size: 50px; -unity-font-style: bold; color: rgb(239, 239, 239);" />
-                <ui:SliderInt picking-mode="Ignore" value="70" high-value="100" style="width: 20%; scale: 2 2; transform-origin: center; align-items: center; flex-direction: row; justify-content: space-between; position: relative; left: 25%;" />
-            </ui:GroupBox>
-            <ui:GroupBox name="SfxVolume" style="flex-direction: row; width: 50%; height: 100px; padding-left: 185px; padding-right: 42px; padding-top: 10px; padding-bottom: 10px; align-items: center; justify-content: flex-start;">
-                <ui:Label text="SFX" display-tooltip-when-elided="true" style="font-size: 50px; -unity-font-style: bold; color: rgb(239, 239, 239);" />
-                <ui:SliderInt picking-mode="Ignore" value="70" high-value="100" style="width: 20%; scale: 2 2; transform-origin: center; align-items: center; flex-direction: row; justify-content: space-between; position: relative; left: 34%;" />
-            </ui:GroupBox>
-            <ui:Button text="Back" display-tooltip-when-elided="true" name="Btn_Back" class="button" />
-        </ui:GroupBox>
     </ui:GroupBox>
 </ui:UXML>

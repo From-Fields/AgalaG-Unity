@@ -22,7 +22,7 @@ public class MainMenuUIManager : MonoBehaviour
         _mainOptions = root.Q<GroupBox>("MainOptions");
         _settings = root.Q<GroupBox>("Settings");
 
-        _settings.SetEnabled(false);
+        BackToMainOptions();
 
         Button startButton = root.Q<Button>("Btn_Start");
         Button settingsButton = root.Q<Button>("Btn_Settings");
