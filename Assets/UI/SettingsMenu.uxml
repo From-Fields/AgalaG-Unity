@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/Stylesheet/SettingsMenu-Stylesheet.uss?fileID=7433441132597879392&amp;guid=d08d90696df56ad4bb4993c6d311de49&amp;type=3#SettingsMenu-Stylesheet" />
-    <ui:GroupBox name="Settings" style="width: 100%; height: 100%; visibility: visible; flex-grow: 1; display: flex;">
+    <ui:GroupBox name="Settings" style="width: 100%; height: 100%; visibility: hidden; flex-grow: 1; display: flex;">
         <ui:Label text="Settings" display-tooltip-when-elided="true" name="Title" usage-hints="None" style="left: 0; font-size: 150%; -unity-text-align: upper-center; -unity-font: none; -unity-font-style: bold; top: 5%; color: rgb(255, 156, 76);" />
         <ui:GroupBox name="Configs" style="width: 100%; height: 550px; bottom: 5%; position: absolute; align-items: center;">
             <ui:GroupBox name="FullscreenContainer" style="width: 50%; height: 100px; justify-content: space-around; flex-direction: row; padding-left: 42px; padding-right: 42px; padding-top: 10px; padding-bottom: 10px; align-items: center;">
