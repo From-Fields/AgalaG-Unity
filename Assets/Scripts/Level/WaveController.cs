@@ -8,7 +8,7 @@ public class WaveController
     private bool _isDone;
     private float _timeout;
     public Action onWaveDone;
-    private List<iWaveUnit> unitList;
+    private List<iWaveUnit> _unitList, _unitCache;
 
     public bool IsDone => _isDone;
 
@@ -16,11 +16,14 @@ public class WaveController
     {
         this._isDone = false;
         this._timeout = timeout;
-        this.unitList = unitList;
+        this._unitCache = unitList;
     }
     public void Initialize(Bounds levelBounds)
     {
-        foreach (iWaveUnit unit in unitList)
+        this._isDone = false;
+        _unitList = new List<iWaveUnit>(_unitCache);
+
+        foreach (iWaveUnit unit in _unitList)
         {
             unit.onUnitReleased += RemoveUnitFromWave;
             unit.Initialize(levelBounds);
@@ -30,9 +33,10 @@ public class WaveController
     }
     private void RemoveUnitFromWave(iWaveUnit unit)
     {
-        unitList.Remove(unit);
+        unit.onUnitReleased -= RemoveUnitFromWave;
+        _unitList.Remove(unit);
 
-        if(unitList.Count == 0)
+        if(_unitList.Count == 0)
         {
             onWaveDone?.Invoke();
             _isDone = true;
@@ -40,9 +44,9 @@ public class WaveController
     }
     private void TimeOutAllUnits()
     {
-        int unitCount = unitList.Count;
+        int unitCount = _unitList.Count;
         for (int i = 0; i < unitCount; i++) {
-            iWaveUnit unit = unitList[i];
+            iWaveUnit unit = _unitList[i];
             unit.ExecuteTimeoutAction();
         }
 
@@ -50,13 +54,13 @@ public class WaveController
     }
     private void EliminateAllUnits()
     {
-        int unitCount = unitList.Count;
+        int unitCount = _unitList.Count;
 
         for (int i = 0; i < unitCount; i++) {
             if(_isDone)
                 return;
 
-            unitList[i]?.Reserve();
+            _unitList[i]?.Reserve();
         }
         if(_isDone)
             return;
