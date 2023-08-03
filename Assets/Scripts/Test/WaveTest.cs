@@ -37,7 +37,6 @@ public class WaveTest : MonoBehaviour
                 drop: new RepairPowerUp()
             ),
             new WaveHazard(
-                EntityPool<Hazard>.Instance.Pool.Get(),
                 new Vector2(7.4f, 5.7f), 
                 new Vector2(-0.2f, -1),
                 maxBounces: 3,

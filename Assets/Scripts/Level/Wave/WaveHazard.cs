@@ -14,13 +14,12 @@ public class WaveHazard: iWaveUnit
     private Vector2 _position, _direction, _scale;
 
     public WaveHazard(
-        Hazard hazard, Vector2 position, Vector2 direction, Sprite sprite = null,
+        Vector2 position, Vector2 direction, Sprite sprite = null,
         bool rotate = true, float speed = 5, float rotationSpeed = 100, 
         uint damage = 1, uint health = 1, uint maxBounces = 0, bool waitForTimeout = false,
         Vector2? scale = null, Action<iWaveUnit> onUnitReleased = null)
     {
         this.onUnitReleased = onUnitReleased;
-        _hazard = hazard;
         _sprite = sprite;
         _rotate = rotate;
         _speed = speed;
@@ -40,6 +39,8 @@ public class WaveHazard: iWaveUnit
     }
 
     public void Initialize(Bounds bounds) {
+        _hazard = EntityPool<Hazard>.Instance.Pool.Get();
+
         _hazard.Initialize(
             _position, _direction, _sprite,_speed, _damage, _health, _rotate, _rotationSpeed, _scale, _maxBounces
         );
