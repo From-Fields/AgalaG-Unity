@@ -45,7 +45,7 @@ public class WaveUnit<T>: iWaveUnit where T: Enemy<T>
         _hasTimedOut = false;
 
         _enemy = EntityPool<T>.Instance.Pool.Get();
-        _enemy.Initialize(_actions, _startingAction, _timeoutAction, _startingPoint, levelBounds, drop: _drop);
+        _enemy.Initialize(new Queue<iEnemyAction>(_actions), _startingAction, _timeoutAction, _startingPoint, levelBounds, drop: _drop);
 
         _enemy.onDeath += _onDeath;
         _enemy.onRelease += _onRelease;

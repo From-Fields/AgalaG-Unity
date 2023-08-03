@@ -27,6 +27,8 @@ public class Shoot: iEnemyAction
         this._isDone = false;
         CoroutineRunner.Instance.CallbackTimer(_timeout, () => _isDone = true);
     }
-    public void OnFinish(iEnemy target) { return; }
+    public void OnFinish(iEnemy target) {
+        this._isDone = false;
+    }
     #endregion
 }
