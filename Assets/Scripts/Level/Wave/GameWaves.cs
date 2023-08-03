@@ -41,81 +41,81 @@ public static class GameWaves
                 }
             );
 
-            // Wave bumbleTrouble = new Wave
-            // (
-            //     8, 
-            //     new List<iWaveUnit>() 
-            //     {
-            //         new WaveUnit<EnemyBumblebee>
-            //         (
-            //             new Vector2(width * 0.5f, -height * 0.2f),
-            //             new WaitSeconds(1),
-            //             new MoveTowards(new Vector2(-width*0.2f, height * 0.6f), speedModifier: 4f),
-            //             new Queue<iEnemyAction>(new iEnemyAction[] { 
-            //                 new MoveTowards(new Vector2(width * 0.5f, height * 0.3f)), 
-            //                 new Shoot(3),
-            //                 new MoveAndShoot(new Vector2(width * 0.5f, height * 0.6f)),
-            //             }),
-            //             onDeath
-            //         ),
-            //         new WaveUnit<EnemyBumblebee>
-            //         (
-            //             new Vector2(width * 0.2f, -height * 0.2f),
-            //             new MoveTowards(new Vector2(width * 0.2f, height * 0.2f)),
-            //             new MoveTowards(new Vector2(width * 0.5f, height * 1.2f), speedModifier: 4f, stopOnEnd: false, trackingSpeed: 5),
-            //             new Queue<iEnemyAction>(new iEnemyAction[] { 
-            //                 new MoveAndShoot(new Vector2(width * 0.4f, height * 0.1f)),
-            //                 new MoveAndShoot(new Vector2(width * 0.6f, height * 0.1f)),
-            //                 new MoveAndShoot(new Vector2(width * 0.8f, height * 0.2f)),
-            //                 new MoveAndShoot(new Vector2(width * 0.5f, height * 0.4f)),
-            //                 new MoveAndShoot(new Vector2(width * 0.15f, height * 0.2f)),
-            //             }),
-            //             onDeath
-            //         ),
-            //     }
-            // );
+            Wave bumbleTrouble = new Wave
+            (
+                8, 
+                new List<iWaveUnit>() 
+                {
+                    new WaveUnit<EnemyBumblebee>
+                    (
+                        new Vector2(width * 0f, height * 1.4f),
+                        new WaitSeconds(1),
+                        new MoveTowards(new Vector2(-width*1.4f, -height * 0.2f), speedModifier: 4f),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0f, height * 0.4f)), 
+                            new Shoot(3),
+                            new MoveAndShoot(new Vector2(width * 0f, -height * 0.2f)),
+                        }),
+                        onDeath
+                    ),
+                    new WaveUnit<EnemyBumblebee>
+                    (
+                        new Vector2(-width * 0.6f, height * 1.4f),
+                        new MoveTowards(new Vector2(-width * 0.6f, height * 0.6f)),
+                        new MoveTowards(new Vector2(width * 0f, -height * 1.4f), speedModifier: 4f, stopOnEnd: false, trackingSpeed: 5),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveAndShoot(new Vector2(-width * 0.2f, height * 0.8f)),
+                            new MoveAndShoot(new Vector2(width * 0.2f, height * 0.8f)),
+                            new MoveAndShoot(new Vector2(width * 0.6f, height * 0.6f)),
+                            new MoveAndShoot(new Vector2(width * 0f, height * 0.2f)),
+                            new MoveAndShoot(new Vector2(-width * 0.3f, height * 0.6f)),
+                        }),
+                        onDeath
+                    ),
+                }
+            );
 
-            // Wave geminiSentry = new Wave
-            // (
-            //     9, 
-            //     new List<iWaveUnit>() 
-            //     {
-            //         new WaveUnit<EnemyGemini>
-            //         (
-            //             new Vector2(width * 0.5f, -height * 0.2f),
-            //             new MoveTowards(new Vector2(width * 0.5f, height * 0.2f)),
-            //             new MoveTowards(new Vector2(width * 0.5f, -height * 0.2f)),
-            //             new Queue<iEnemyAction>(new iEnemyAction[] { 
-            //                 new Shoot(8),
-            //             }),
-            //             onDeath
-            //         ),
-            //         new WaveUnit<EnemyBumblebee>
-            //         (
-            //             new Vector2(-width * 0.1f, -height * 0.2f),
-            //             new WaitSeconds(1),
-            //             new MoveAndShoot(new Vector2(width * 1.2f, height * 1f)),
-            //             new Queue<iEnemyAction>(new iEnemyAction[] { 
-            //                 new MoveTowards(new Vector2(width * 0.25f, height * 0.3f)), 
-            //                 new Shoot(2)
-            //             }),
-            //             onDeath
-            //         ),
-            //         new WaveUnit<EnemyBumblebee>
-            //         (
-            //             new Vector2(width * 1.1f, -height * 0.2f),
-            //             new WaitSeconds(1),
-            //             new MoveAndShoot(new Vector2(-width * 0.2f, height * 1f)),
-            //             new Queue<iEnemyAction>(new iEnemyAction[] { 
-            //                 new MoveTowards(new Vector2(width * 0.75f, height * 0.2f)), 
-            //                 new Shoot(2)
-            //             }),
-            //             onDeath
-            //         ),
-            //         new WaveHazard(new Vector2(width * 0.3f, -height * 0.1f), new Vector2(0.75f, 1.5f), maxBounces: 5),
-            //         new WaveHazard(new Vector2(width * 0.7f, -height * 0.1f), new Vector2(-0.75f, 3), maxBounces: 5)
-            //     }
-            // );
+            Wave geminiSentry = new Wave
+            (
+                9, 
+                new List<iWaveUnit>() 
+                {
+                    new WaveUnit<EnemyGemini>
+                    (
+                        new Vector2(width * 0f, height * 1.4f),
+                        new MoveTowards(new Vector2(width * 0f, height * 0.6f)),
+                        new MoveTowards(new Vector2(width * 0f, height * 1.4f)),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new Shoot(8),
+                        }),
+                        onDeath
+                    ),
+                    new WaveUnit<EnemyBumblebee>
+                    (
+                        new Vector2(-width * 1.2f, height * 1.4f),
+                        new WaitSeconds(1),
+                        new MoveAndShoot(new Vector2(width * 1.4f, -height * 1f)),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(-width * 0.5f, height * 0.6f)), 
+                            new Shoot(2)
+                        }),
+                        onDeath
+                    ),
+                    new WaveUnit<EnemyBumblebee>
+                    (
+                        new Vector2(width * 1.2f, height * 1.4f),
+                        new WaitSeconds(1),
+                        new MoveAndShoot(new Vector2(-width * 1.4f, -height * 1f)),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.5f, height * 0.4f)), 
+                            new Shoot(2)
+                        }),
+                        onDeath
+                    ),
+                    new WaveHazard(new Vector2(-width * 0.6f, height * 1.2f), new Vector2(0.75f, -1.5f), maxBounces: 5),
+                    new WaveHazard(new Vector2(width * 0.4f, height * 1.2f), new Vector2(-0.75f, -3), maxBounces: 5)
+                }
+            );
 
             // Wave asteroidClock = new Wave
             // (
@@ -448,9 +448,9 @@ public static class GameWaves
             waves.AddRange(
                 new List<WaveController>()
                     {
-                        new WaveController(doubleKami.timeout, doubleKami.units),
+                        // new WaveController(doubleKami.timeout, doubleKami.units),
                         // new WaveController(bumbleTrouble.timeout, bumbleTrouble.units),
-                        // new WaveController(geminiSentry.timeout, geminiSentry.units),
+                        new WaveController(geminiSentry.timeout, geminiSentry.units),
                         // new WaveController(asteroidClock.timeout, asteroidClock.units),
                         // new WaveController(flyByNight.timeout, flyByNight.units),
                         // new WaveController(symmetry.timeout, symmetry.units),
