@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EndlessLevel: ScriptableObject, iLevel
+public class EndlessLevel: iLevel
 {
     private List<WaveController> _waveList;
     private Unity.Mathematics.Random _seed;
@@ -18,7 +18,11 @@ public class EndlessLevel: ScriptableObject, iLevel
         :this(new List<WaveController>(waves), bounds) { }
     public EndlessLevel(List<WaveController> waves, Bounds bounds) {
         _waveList = waves;
-        _seed = new Unity.Mathematics.Random();
+        uint seed = (uint)DateTime.Now.Millisecond;
+
+        Debug.Log(seed);
+
+        _seed = new Unity.Mathematics.Random(seed);
         _bounds = bounds;
         ShuffleWaves();
     }
@@ -38,6 +42,9 @@ public class EndlessLevel: ScriptableObject, iLevel
             do {
                 ShuffleWaves();
                 _currentWave = _waveQueue.Dequeue();
+
+                if(_waveList.Count == 1)
+                    break;
             } while(_currentWave == _previousWave);
         }
         else {
