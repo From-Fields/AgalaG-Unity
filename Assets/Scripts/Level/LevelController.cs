@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelController: MonoBehaviour
 {
@@ -45,6 +46,16 @@ public class LevelController: MonoBehaviour
     }
 
     public void Awake() {
+        #if UNITY_EDITOR
+            if(GameManager.PreviousScene != GameScene.MENU) {
+                GameManager.SwitchToScene(GameScene.MENU);
+                return;
+            }
+            else
+        #endif
+
+        _level = GameManager.Instance.Level;
+
         _player.onDeath += GameOver;
         CallNextWave();
     }
