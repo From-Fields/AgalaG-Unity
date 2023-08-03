@@ -4,7 +4,7 @@ using UnityEngine;
 
 [System.Serializable]
 [CreateAssetMenu(menuName = "Level/Level", fileName = "Level")]
-public class Level: ScriptableObject, iLevel
+public class Level: iLevel
 {
     [SerializeField]
     private List<WaveController> _waveList = new List<WaveController>();
