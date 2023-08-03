@@ -16,7 +16,7 @@ public class WaveController
     {
         this._isDone = false;
         this._timeout = timeout;
-        this._unitCache = unitList;
+        this._unitCache = new List<iWaveUnit>(unitList);
     }
     public void Initialize(Bounds levelBounds)
     {
@@ -54,13 +54,13 @@ public class WaveController
     }
     private void EliminateAllUnits()
     {
-        int unitCount = _unitList.Count;
+        int unitCount = _unitCache.Count;
 
         for (int i = 0; i < unitCount; i++) {
             if(_isDone)
                 return;
 
-            _unitList[i]?.Reserve();
+            _unitCache[i]?.Reserve();
         }
         if(_isDone)
             return;
