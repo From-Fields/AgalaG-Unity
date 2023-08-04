@@ -17,6 +17,13 @@ public class MainMenuUIManager : MonoBehaviour
 
     void OnEnable()
     {
+        #if UNITY_EDITOR
+            if(GameManager.PreviousScene != GameScene.GAME) {
+                StartGame();
+                return;
+            }
+        #endif
+
         VisualElement root = GetComponent<UIDocument>().rootVisualElement;
 
         _mainOptions = root.Q<GroupBox>("MainOptions");
@@ -52,7 +59,8 @@ public class MainMenuUIManager : MonoBehaviour
     #region MainOptions
     private void StartGame()
     {
-        SceneManager.LoadScene("SampleScene");
+        GameManager.Instance.Level = GameWaves.GetLevel(new Bounds(Vector3.zero, new Vector3(18.8f, 11.1f)), null);
+        GameManager.SwitchToScene(GameScene.GAME);
     }
 
     private void GotoSettings()

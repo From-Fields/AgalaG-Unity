@@ -250,7 +250,7 @@ MonoBehaviour:
   _defaultAcceleration: 10
   _currentAcceleration: 0
   _weaponDamage: 1
-  _weaponCooldown: 0.3
+  _weaponCooldown: 0.5
   _missileSpeed: 4
   _weaponReference: {fileID: 4886324328137749225}
   _defaultHealth: 1

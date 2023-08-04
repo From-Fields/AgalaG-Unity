@@ -57,6 +57,7 @@ public class AudioManager : MonoBehaviour
                 Instantiate<AudioSource>(_loopingAudioSourcePrefab)
             );
             _loopingAudioSources[audioType].transform.SetParent(transform);
+            _loopingAudioSources[audioType].transform.localPosition = Vector3.zero;
         }
 
         source = _loopingAudioSources[audioType];
