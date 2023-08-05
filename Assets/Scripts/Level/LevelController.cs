@@ -60,6 +60,7 @@ public class LevelController: MonoBehaviour
     public void RestartLevel()
     {
         GameManager.SwitchToScene(GameScene.GAME);
+        GameManager.SwitchPause(false);
     }
 
     private void OnLifeChange(int life)
