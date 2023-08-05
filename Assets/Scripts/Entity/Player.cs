@@ -100,8 +100,6 @@ public class Player : MonoBehaviour, Entity
         _isInvulnerable = invulnerable;
         if(invulnerable)
             StartCoroutine(WaitForInvulnerability(1.5f));
-
-        Debug.Log(invulnerable);
     }
 
     private IEnumerator WaitForInvulnerability(float time) {

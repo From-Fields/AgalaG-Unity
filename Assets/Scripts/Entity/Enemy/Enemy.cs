@@ -105,11 +105,6 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
             this.SwitchAction(this._startingAction);
         else
             this.ExecuteNextAction();
-
-            
-
-        if(this is EnemyGeminiChild)
-        Debug.Log("Initialized");
     }
     public void Reserve()
     {
@@ -133,9 +128,6 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
         this.ReserveToPool();
 
         this.onRelease?.Invoke();
-
-        if(this is EnemyGeminiChild)
-        Debug.Log("Reserved");
     }
 
     //Abstract Methods
