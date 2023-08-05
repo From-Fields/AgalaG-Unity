@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +6,8 @@ using UnityEngine;
 public class DefaultWeapon : Weapon
 {
     private Vector2 _direction = Vector2.up;
+
+    public override string AmmunitionToString => "∞";
 
     public override void Initialize(LayerMask layer) {
         _shooter = gameObject.tag;

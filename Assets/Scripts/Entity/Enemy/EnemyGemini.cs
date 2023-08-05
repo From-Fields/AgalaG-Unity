@@ -64,7 +64,10 @@ public class EnemyGemini : Enemy<EnemyGemini>
         _currentHealth = Math.Clamp(_currentHealth - damage, 0, _maxHealth);
 
         if(_currentHealth == 0)
+        {
+            giveScore = true;
             Die();
+        }
     }
     protected override void OnCollision(Collision2D other) { /*Do Nothing*/}
     

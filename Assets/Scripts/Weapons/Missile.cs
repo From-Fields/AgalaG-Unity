@@ -11,6 +11,8 @@ public class Missile : Weapon
 
     private Coroutine _reloadCoroutine = null;
 
+    public override Sprite WeaponIcon => Resources.Load<Sprite>("Sprites/Bullet/Missile_Player");
+
     public override void Initialize(LayerMask layer)
     {
         _shooter = transform.parent.gameObject.tag;

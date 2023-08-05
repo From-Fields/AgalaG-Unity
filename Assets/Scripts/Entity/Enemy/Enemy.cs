@@ -42,6 +42,7 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
     protected AudioManager _audioManager;
     private SpriteRenderer _visuals;
     protected Bounds _levelBounds;
+    protected bool giveScore = false;
 
     //Properties
     public bool IsDead => this._isDead;
@@ -198,6 +199,10 @@ public abstract class Enemy<T>: MonoBehaviour, iEnemy, iPoolableEntity<T> where 
             return;
 
         onDeath?.Invoke(this.score);
+        if (giveScore)
+        {
+            LevelController.Instance.AddScore(this.score);
+        }
         this._isDead = true;
 
         if(_droppedItem != null) {
