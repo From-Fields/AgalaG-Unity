@@ -20,8 +20,6 @@ public class EndlessLevel: iLevel
         _waveList = waves;
         uint seed = (uint)DateTime.Now.Millisecond;
 
-        Debug.Log(seed);
-
         _seed = new Unity.Mathematics.Random(seed);
         _bounds = bounds;
         ShuffleWaves();

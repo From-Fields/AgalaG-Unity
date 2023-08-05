@@ -26,7 +26,7 @@ public class LevelController: MonoBehaviour
 
     public int Score => _score;
 
-    public void Awake()
+    public void OnEnable()
     {
         Instance = this;
 
@@ -59,8 +59,10 @@ public class LevelController: MonoBehaviour
 
     public void RestartLevel()
     {
-        GameManager.SwitchToScene(GameScene.GAME);
+        CoroutineRunner.Instance.InterruptAllRoutines();
+        GameManager.Instance.Level = GameWaves.GetLevel(new Bounds(Vector3.zero, new Vector3(18.8f, 11.1f)), null);
         GameManager.SwitchPause(false);
+        GameManager.SwitchToScene(GameScene.GAME);
     }
 
     private void OnLifeChange(int life)
@@ -116,5 +118,4 @@ public class LevelController: MonoBehaviour
         onGameOver = null;
         _player.onDeath -= GameOver;
     }
-
 }
