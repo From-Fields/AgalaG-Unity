@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour
@@ -24,6 +24,10 @@ public abstract class Weapon : MonoBehaviour
 
     public int MaxAmmunition => _maxAmmunition;
     public int CurrentAmmunition => _currentAmmuntion;
+
+    public virtual string AmmunitionToString => CurrentAmmunition.ToString();
+
+    public virtual Sprite WeaponIcon => Resources.Load<Sprite>("Sprites/Bullet/Bullet_Player");
 
     void Awake() {
         _currentAmmuntion = _maxAmmunition;

@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/UI/Stylesheet/MainMenu-Stylesheet.uss?fileID=7433441132597879392&amp;guid=9740032564dbb984ba1e64272f981632&amp;type=3#MainMenu-Stylesheet" />
+    <ui:VisualElement name="container" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.6);">
+        <ui:Label text="Game Over" display-tooltip-when-elided="true" name="Title" usage-hints="None" style="left: 0; font-size: 150px; -unity-text-align: upper-center; -unity-font: none; -unity-font-style: bold; top: 10%; color: rgb(185, 27, 68); position: relative;" />
+        <ui:GroupBox name="ScoreShower" style="position: absolute; top: 32%; width: 40%; margin-left: 0; margin-right: 0; padding-left: 6px; padding-right: 6px; padding-top: 6px; padding-bottom: 6px; height: 180px; left: 30%; right: 30%; margin-bottom: 0; margin-top: 0;">
+            <ui:Label text="Your Score" display-tooltip-when-elided="true" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; font-size: 47px; -unity-font-style: bold; -unity-text-align: upper-center; color: rgb(195, 106, 0);" />
+            <ui:Label text="9999999999999999999" display-tooltip-when-elided="true" name="score" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; font-size: 47px; -unity-font-style: bold; -unity-text-align: upper-center; color: rgb(210, 231, 227);" />
+        </ui:GroupBox>
+        <ui:VisualElement name="Container_Buttons" style="position: relative; left: auto; align-items: center; justify-content: center; height: 60%; top: 20%; bottom: 20%;">
+            <ui:Button text="Retry" display-tooltip-when-elided="true" name="btn_retry" class="button" />
+            <ui:Button text="Exit" display-tooltip-when-elided="true" name="btn_quit" class="button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

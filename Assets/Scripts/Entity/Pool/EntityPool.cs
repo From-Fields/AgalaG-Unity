@@ -13,7 +13,7 @@ public class SingletonObjectPool<T> : Singleton<SingletonObjectPool<T>> where T:
         get {
             if(_pool == null) {
                 _pool = new ObjectPool<T>(ObjReference.OnCreate, ObjReference.onGetFromPool, ObjReference.onReleaseToPool);
-                UnityEngine.SceneManagement.SceneManager.activeSceneChanged += (_, __) => _pool.Clear();
+                UnityEngine.SceneManagement.SceneManager.sceneUnloaded += (_) => _pool.Clear();
             }
 
             return _pool;

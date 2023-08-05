@@ -35,6 +35,12 @@ public class Player : MonoBehaviour, Entity
 
     public List<iPowerUp> powerUps = new List<iPowerUp>();
 
+    public int shields = 0;
+
+    public UnityAction<int> onLifeUpdate;
+    public UnityAction<int> onShieldUpdate;
+    public UnityAction<Sprite, string> onNewWeapon;
+    public UnityAction<string> onWeaponShoot;
     public UnityAction onDeath;
 
     // References
@@ -59,6 +65,8 @@ public class Player : MonoBehaviour, Entity
         newWeapon.transform.position = transform.position;
         newWeapon.Initialize(LayerMask.NameToLayer("PlayerBullets"));
         newWeapon.onShoot += PlayWeaponSound;
+
+        onNewWeapon?.Invoke(this.currentWeapon.WeaponIcon, this.currentWeapon.AmmunitionToString);
     }
 
     public void SwitchToDefaultWeapon() => SwitchWeapon(_defaultWeapon);
@@ -75,18 +83,25 @@ public class Player : MonoBehaviour, Entity
             PlaySound(EntityAudioType.PowerUp);
             this.powerUps.Add(newPowerUp);
         }
+
+        onShieldUpdate?.Invoke(shields);
     }
+
     public void RemovePowerUp(iPowerUp powerUp) {
         this.powerUps.Remove(powerUp);
     }
-    public void Heal(int amount) => this._currentHealth = Mathf.Clamp(_currentHealth + amount, 0, _maxHealth);
+
+    public void Heal(int amount)  {
+        this._currentHealth = Mathf.Clamp(_currentHealth + amount, 0, _maxHealth);
+        onLifeUpdate?.Invoke(this._currentHealth);
+    }
+
     private void SetInvulnerability(bool invulnerable) {
         _isInvulnerable = invulnerable;
         if(invulnerable)
             StartCoroutine(WaitForInvulnerability(1.5f));
-
-        Debug.Log(invulnerable);
     }
+
     private IEnumerator WaitForInvulnerability(float time) {
         float accumulator = 0;
         float currTime = Time.time;
@@ -140,6 +155,7 @@ public class Player : MonoBehaviour, Entity
     public void Shoot()
     {
         currentWeapon.Shoot();
+        onWeaponShoot?.Invoke(currentWeapon.AmmunitionToString);
         if (currentWeapon.isEmpty())
         {
             SwitchToDefaultWeapon();
@@ -156,7 +172,10 @@ public class Player : MonoBehaviour, Entity
             _damage = powerUps[i].OnTakeDamage(_damage, _currentHealth); 
         }
 
+        onShieldUpdate.Invoke(shields);
+
         this._currentHealth = Mathf.Clamp(_currentHealth - _damage, 0, _maxHealth);
+        onLifeUpdate?.Invoke(this._currentHealth);
         PlaySound(EntityAudioType.Damage);
 
         if(this._currentHealth <= 0)

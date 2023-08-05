@@ -55,7 +55,10 @@ public class EnemyBumblebee : Enemy<EnemyBumblebee>
         _currentHealth = Math.Clamp(_currentHealth - damage, 0, _maxHealth);
 
         if(_currentHealth == 0)
+        {
+            giveScore = true;
             Die();
+        }
     }
 
     //Enemy

@@ -11,7 +11,9 @@ public class ShieldPowerUp : PowerUp
 
     public override void OnPickup(Player player) {
         this._player = player;
+        this._player.shields++;
     }
+
     public override int OnTakeDamage(int damage, int playerHealth) {
         if(damage <= 0)
             return damage;
@@ -22,5 +24,6 @@ public class ShieldPowerUp : PowerUp
     public override void OnEnd() {
         _player.PlaySound(clip);
         _player.RemovePowerUp(this);
+        _player.shields--;
     }
 }

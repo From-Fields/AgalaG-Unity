@@ -44,7 +44,10 @@ public class EnemyKamikaze: Enemy<EnemyKamikaze>
         _currentHealth = Mathf.Clamp(_currentHealth - damage, 0, _maxHealth);
 
         if(_currentHealth == 0)
+        {
+            giveScore = true;
             Die();
+        }
     }
 
     //iPoolableEntity

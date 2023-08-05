@@ -17,13 +17,6 @@ public class MainMenuUIManager : MonoBehaviour
 
     void OnEnable()
     {
-        #if UNITY_EDITOR
-            if(GameManager.PreviousScene != GameScene.GAME) {
-                StartGame();
-                return;
-            }
-        #endif
-
         VisualElement root = GetComponent<UIDocument>().rootVisualElement;
 
         _mainOptions = root.Q<GroupBox>("MainOptions");

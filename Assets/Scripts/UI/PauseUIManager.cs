@@ -32,15 +32,17 @@ public class PauseUIManager : MonoBehaviour
     }
 
     private void Resume() => GameManager.SwitchPause(false);
+
     private void Retry()
     {
-        // TODO: Create Settings Behaviour
-        Debug.Log("Retry Button clicked!");
+        LevelController.Instance.RestartLevel();
     }
+
     private void GoToMenu() {
         GameManager.SwitchPause(false);
         GameManager.SwitchToScene(GameScene.MENU);
-    } 
+    }
+
     private void SetActive(bool active) => _document.SetActive(active);
 
     private void OnDestroy() {

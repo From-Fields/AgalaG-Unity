@@ -91,6 +91,7 @@ public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
         if(_wasKilled) {
             this._parent.TakeDamage(1);
             this._parent.PlayDeathSound();
+            giveScore = true;
         }
     }
     protected override void SubUpdate() {
