@@ -7,6 +7,8 @@ using UnityEngine.Pool;
 [RequireComponent(typeof(Rigidbody2D))]
 public class EnemyGemini : Enemy<EnemyGemini>
 {
+    private bool _isReleased; 
+
     //Attributes
     [Header("Child Settings")][SerializeField]
     private float _geminiPositionOffset = 0.5f;
@@ -80,6 +82,7 @@ public class EnemyGemini : Enemy<EnemyGemini>
         this._currentAcceleration = _defaultAcceleration;
 
         this._isDead = false;
+        this._isReleased = false;
         this._maxHealth = this._defaultHealth;
         this._currentHealth = this._defaultHealth;
 
@@ -94,7 +97,13 @@ public class EnemyGemini : Enemy<EnemyGemini>
             child.SetWeapon(_weaponCooldown, _geminiMissileDamage, _missileSpeed);
         }
     }
-    protected override void ReserveToPool() => Pool.Release(this);
+    protected override void ReserveToPool() {
+        if(_isReleased)
+            return;
+
+        Pool.Release(this);
+        _isReleased = true;
+    }
     protected override void SubReserve() {
         base.SubReserve();
 
