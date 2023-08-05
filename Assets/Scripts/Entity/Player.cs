@@ -91,7 +91,10 @@ public class Player : MonoBehaviour, Entity
         this.powerUps.Remove(powerUp);
     }
 
-    public void Heal(int amount) => this._currentHealth = Mathf.Clamp(_currentHealth + amount, 0, _maxHealth);
+    public void Heal(int amount)  {
+        this._currentHealth = Mathf.Clamp(_currentHealth + amount, 0, _maxHealth);
+        onLifeUpdate?.Invoke(this._currentHealth);
+    }
 
     private void SetInvulnerability(bool invulnerable) {
         _isInvulnerable = invulnerable;
