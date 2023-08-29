@@ -216,6 +216,8 @@ public class Player : MonoBehaviour, Entity
         currentWeapon = _defaultWeapon;
         _currentHealth = _maxHealth;
         SwitchToDefaultWeapon();
+    }
+    private void Start() {
         _audioManager.PlaySound(EntityAudioType.Movement, looping: true);
     }
     private void Update() {
