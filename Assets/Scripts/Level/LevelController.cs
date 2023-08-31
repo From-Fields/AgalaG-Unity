@@ -59,6 +59,11 @@ public class LevelController: MonoBehaviour
 
     public void RestartLevel()
     {
+        if(_currentWave != null)
+            _currentWave.onWaveDone -= CallNextWave;
+
+        Instance = null;
+
         CoroutineRunner.Instance.InterruptAllRoutines();
         GameManager.Instance.Level = GameWaves.GetLevel(new Bounds(Vector3.zero, new Vector3(18.8f, 11.1f)), null);
         GameManager.SwitchPause(false);
@@ -88,6 +93,8 @@ public class LevelController: MonoBehaviour
 
     private void CallNextWave() {
         if(_currentWave != null) {
+            if(!_currentWave.IsDone)
+                return;
             _currentWave.onWaveDone -= CallNextWave;
             _currentWave = null;
         }

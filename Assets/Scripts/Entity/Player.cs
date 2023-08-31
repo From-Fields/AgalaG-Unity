@@ -227,18 +227,18 @@ public class Player : MonoBehaviour, Entity
         foreach(PowerUp powerUp in powerUps)
             powerUp.OnTick();
 
-#if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.F2))
-        {
-            Weapon tw = Instantiate(testWeapons[0], gameObject.transform).GetComponent<Weapon>();
-            SwitchWeapon(tw);
-        }
-        else if (Input.GetKeyDown(KeyCode.F3))
-        {
-            Weapon tw = Instantiate(testWeapons[1], gameObject.transform).GetComponent<Weapon>();
-            SwitchWeapon(tw);
-        }
-#endif
+// #if UNITY_EDITOR
+//         if (Input.GetKeyDown(KeyCode.F2))
+//         {
+//             Weapon tw = Instantiate(testWeapons[0], gameObject.transform).GetComponent<Weapon>();
+//             SwitchWeapon(tw);
+//         }
+//         else if (Input.GetKeyDown(KeyCode.F3))
+//         {
+//             Weapon tw = Instantiate(testWeapons[1], gameObject.transform).GetComponent<Weapon>();
+//             SwitchWeapon(tw);
+//         }
+// #endif
 
         _movement = (_inputHandler.HasMovement) ? _inputHandler.Movement : Vector2.zero;
         if(_inputHandler.Shoot)

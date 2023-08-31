@@ -38,8 +38,8 @@ public class WaveController
 
         if(_unitList.Count == 0)
         {
-            onWaveDone?.Invoke();
             _isDone = true;
+            onWaveDone?.Invoke();
         }
     }
     private void TimeOutAllUnits()
@@ -65,6 +65,7 @@ public class WaveController
         if(_isDone)
             return;
 
+        _isDone = true;
         onWaveDone?.Invoke();
     }
 }
